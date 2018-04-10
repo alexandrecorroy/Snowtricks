@@ -1,3 +1,6 @@
-snow_tricks_user_homepage:
-    path:     /autresss
-    defaults: { _controller: SnowTricksUserBundle:Default:index }
+snow_tricks_user_registration:
+    path:     /registration
+    defaults: { _controller: SnowTricksUserBundle:Security:register }
+snow_tricks_user_tokenVerification:
+    path:     /token/{token}
+    defaults: { _controller: SnowTricksUserBundle:Security:tokenVerification }

@@ -54,7 +54,7 @@ class User
      *
      * @ORM\Column(name="status", type="boolean")
      */
-    private $status;
+    private $status = false;
 
     /**
      * @var string
