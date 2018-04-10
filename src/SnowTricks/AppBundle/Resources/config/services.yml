@@ -1,0 +1,4 @@
+services:
+#    snow_tricks_app.example:
+#        class: SnowTricks\AppBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

@@ -1,0 +1,3 @@
+snow_tricks_trick_homepage:
+    path:     /autre
+    defaults: { _controller: SnowTricksTrickBundle:Default:index }
