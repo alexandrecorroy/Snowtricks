@@ -4,3 +4,9 @@ snow_tricks_user_registration:
 snow_tricks_user_tokenVerification:
     path:     /token/{token}
     defaults: { _controller: SnowTricksUserBundle:Security:tokenVerification }
+snow_tricks_user_forgotPassword:
+    path:     /forgot_password
+    defaults: { _controller: SnowTricksUserBundle:Security:forgotPassword }
+snow_tricks_user_resetPassword:
+    path:     /reset_password/{token}
+    defaults: { _controller: SnowTricksUserBundle:Security:resetPassword }

@@ -3,6 +3,9 @@
 namespace SnowTricks\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * User
@@ -10,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="SnowTricks\UserBundle\Repository\UserRepository")
  */
-class User
+class User implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var int
@@ -23,24 +26,44 @@ class User
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 32,
+     *      minMessage = "Your first name must be at least {{ limit }} characters long",
+     *      maxMessage = "Your first name cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(name="username", type="string", length=32, unique=true)
+     *
      */
     private $username;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email.",
+     *     checkMX = true
+     * )
      * @ORM\Column(name="email", type="string", length=128, unique=true)
      */
     private $email;
 
     /**
      * @var string
-     *
+     * @Assert\Regex(
+     *     pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$/",
+     *     match=true,
+     *     message="Your password must contain at least 8 characters string with at least one digit, one upper case letter, one lower case letter and one special symbol"
+     * )
      * @ORM\Column(name="password", type="string", length=255)
      */
     private $password;
+
+    /**
+     * @ORM\Column(name="salt", type="string", length=32, unique=true)
+     */
+    private $salt;
 
     /**
      * @var string
@@ -52,9 +75,9 @@ class User
     /**
      * @var bool
      *
-     * @ORM\Column(name="status", type="boolean")
+     * @ORM\Column(name="is_active", type="boolean")
      */
-    private $status = false;
+    private $isActive = false;
 
     /**
      * @var string
@@ -63,6 +86,58 @@ class User
      */
     private $token;
 
+    /**
+     * @Assert\IsTrue(message="The password cannot match your username")
+     */
+    public function isPasswordSafe()
+    {
+        return $this->username !== $this->password;
+    }
+
+    public function __construct()
+    {
+        $this->salt = md5(uniqid('', true));
+    }
+
+    public function getRoles() { return array('ROLE_USER'); }
+
+    public function getSalt()
+    {
+        return $this->salt;
+
+    }
+
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+
+        return $this;
+    }
+
+    public function eraseCredentials()
+    {
+
+    }
+
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    public function isEnabled()
+    {
+        return $this->isActive;
+    }
 
     /**
      * Get id
@@ -171,27 +246,19 @@ class User
     }
 
     /**
-     * Set status
-     *
-     * @param boolean $status
-     *
-     * @return User
+     * @return bool
      */
-    public function setStatus($status)
+    public function isActive()
     {
-        $this->status = $status;
-
-        return $this;
+        return $this->isActive;
     }
 
     /**
-     * Get status
-     *
-     * @return bool
+     * @param bool $isActive
      */
-    public function getStatus()
+    public function setIsActive($isActive)
     {
-        return $this->status;
+        $this->isActive = $isActive;
     }
 
     /**
@@ -216,6 +283,32 @@ class User
     public function getToken()
     {
         return $this->token;
+    }
+
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->email,
+            $this->password,
+            $this->salt,
+            $this->isActive,
+            $this->token
+        ));
+    }
+
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->email,
+            $this->password,
+            $this->salt,
+            $this->isActive,
+            $this->token
+            ) = unserialize($serialized);
     }
 }
 
