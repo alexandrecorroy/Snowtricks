@@ -1,6 +1,6 @@
 <?php
 
-namespace SnowTricks\TrickBundle\Entity;
+namespace SnowTricks\CommentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Comment
  *
  * @ORM\Table(name="comment")
- * @ORM\Entity(repositoryClass="SnowTricks\TrickBundle\Repository\CommentRepository")
+ * @ORM\Entity(repositoryClass="SnowTricks\CommentBundle\Repository\CommentRepository")
  */
 class Comment
 {
@@ -36,17 +36,37 @@ class Comment
     private $createDate;
 
     /**
+     * @ORM\ManyToOne(targetEntity="SnowTricks\TrickBundle\Entity\Trick")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $trick;
+
+    /**
      * @ORM\ManyToOne(targetEntity="SnowTricks\UserBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
+    public function __construct()
+    {
+        $this->createDate = new \DateTime();
+    }
 
     /**
-     * @ORM\ManyToOne(targetEntity="SnowTricks\TrickBundle\Entity\Trick")
-     * @ORM\JoinColumn(nullable=false)
+     * @return mixed
      */
-    private $trick;
+    public function getTrick()
+    {
+        return $this->trick;
+    }
+
+    /**
+     * @param mixed $trick
+     */
+    public function setTrick($trick)
+    {
+        $this->trick = $trick;
+    }
 
     /**
      * @return mixed
@@ -64,30 +84,7 @@ class Comment
         $this->user = $user;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTrick()
-    {
-        return $this->trick;
-    }
 
-    /**
-     * @param mixed $trick
-     */
-    public function setTrick(Trick $trick)
-    {
-        $this->trick = $trick;
-    }
-
-
-
-
-
-    public function __construct()
-    {
-        $this->createDate = new \DateTime();
-    }
 
     /**
      * Get id
@@ -130,7 +127,7 @@ class Comment
      *
      * @return Comment
      */
-    public function setCreateDate(\DateTime $createDate)
+    public function setCreateDate($createDate)
     {
         $this->createDate = $createDate;
 

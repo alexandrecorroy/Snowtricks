@@ -2,6 +2,7 @@
 
 namespace SnowTricks\TrickBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -56,10 +57,69 @@ class Trick
     private $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SnowTricks\TrickBundle\Entity\Media")
+     * @var string
+     *
+     * @ORM\Column(name="front_picture", type="string", length=255)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $media;
+    private $frontPicture;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SnowTricks\TrickBundle\Entity\Picture", mappedBy="trick", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $pictures;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SnowTricks\TrickBundle\Entity\Video", mappedBy="trick", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $videos;
+
+    public function __construct()
+    {
+        $this->createDate = new \DateTime();
+        $this->pictures = new ArrayCollection();
+        $this->videos = new ArrayCollection();
+    }
+
+    public function addPictures(Picture $picture)
+    {
+        $this->pictures[] = $picture;
+
+        $picture->setTrick($this);
+
+        return $this;
+    }
+
+    public function addVideos(Video $video)
+    {
+        $this->videos[] = $video;
+
+        $video->setTrick($this);
+
+        return $this;
+    }
+
+    public function removePicture(Picture $picture)
+    {
+        $this->pictures->removeElement($picture);
+    }
+
+    public function removeVideo(Video $video)
+    {
+        $this->videos->removeElement($video);
+    }
+
+    public function getPictures()
+    {
+        return $this->pictures;
+    }
+
+    public function getVideos()
+    {
+        return $this->videos;
+    }
 
     /**
      * @return mixed
@@ -78,23 +138,20 @@ class Trick
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getMedia()
+    public function getFrontPicture()
     {
-        return $this->media;
+        return $this->frontPicture;
     }
 
     /**
-     * @param mixed $media
+     * @param string $frontPicture
      */
-    public function setMedia(Media $media)
+    public function setFrontPicture($frontPicture)
     {
-        $this->media = $media;
+        $this->frontPicture = $frontPicture;
     }
-
-
-
 
     /**
      * Get id

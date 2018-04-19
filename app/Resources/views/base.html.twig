@@ -18,7 +18,7 @@
     <!-- Custom styles for this template -->
     <link href="{{ asset('css/agency.css') }}" rel="stylesheet">
 
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.png') }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
 
 <body id="page-top">
@@ -45,7 +45,7 @@
                     <a class="nav-link js-scroll-trigger" href="{{ path('snow_tricks_homepage') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#portfolio">Tricks</a>
+                    <a class="nav-link js-scroll-trigger" href="{{ path('snow_tricks_homepage') }}#services">Tricks</a>
                 </li>
                 {% if app.user %}
                     <li class="nav-item">
@@ -69,14 +69,10 @@
 <!-- Services -->
 <section id="services">
     <div class="container">
-        <div class="row">
-                {% if app.user %}{{ app.user.username }}{% endif %}
-                {% block content %}{% endblock %}
-        </div>
+        {% if app.user %}{{ app.user.username }}{% endif %}
+        {% block content %}{% endblock %}
     </div>
 </section>
-
-{% block tricks %}{% endblock %}
 
 <!-- Footer -->
 <footer>
