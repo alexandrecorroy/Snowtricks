@@ -13,6 +13,20 @@ class CommentRepository extends \Doctrine\ORM\EntityRepository
 
     public function findAll()
     {
-        return $this->findBy(array(), array('createDate' => 'DESC'));
+        return $this->findBy(array(), array('id' => 'DESC'), 10);
+    }
+
+    public function findOtherComments($id, $lastComment)
+    {
+        return $this->createQueryBuilder('comment')
+            ->select('comment')
+            ->orderBy('comment.id', 'DESC')
+            ->andWhere('comment.id < :lastComment')
+            ->andWhere('comment.trick = :id')
+            ->setMaxResults(10)
+            ->setParameter('lastComment', $lastComment)
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getResult();
     }
 }

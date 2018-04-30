@@ -95,5 +95,49 @@
 
 {% block javascripts %}
         {{ parent() }}
+    <script type="text/javascript">
+            var stop = 1;
+            var url = "{{ path('snow_tricks_comment_list_comment_ajax', {'id': trick.id, 'lastComment': 'null'})|escape('js') }}";
+            url = url.replace('null', '');
+
+            $(window).scroll(function() {
+
+                if(stop > 0)
+                {
+                    if($(window).scrollTop() + $(window).height() >= $(document).height()) {
+                        var last_id = $(".listComments:last").attr("id");
+                        loadMoreData(last_id);
+                    }
+                }
+
+            });
+
+
+            function loadMoreData(last_id){
+                $.ajax(
+                    {
+                        url: url+last_id,
+                        type: "get",
+                        beforeSend: function()
+                        {
+                            $('.ajax-load').show();
+
+                        }
+                    })
+                    .done(function(data)
+                    {
+                        if(!data)
+                            stop--;
+
+                        $('.ajax-load').hide();
+                        $("#comments-data").append(data);
+                        console.log(stop);
+                    })
+                    .fail(function(jqXHR, ajaxOptions, thrownError)
+                    {
+                        alert('server not responding...');
+                    });
+            }
+    </script>
     <script src="{{ asset('js/js.js') }}"></script>
 {% endblock %}

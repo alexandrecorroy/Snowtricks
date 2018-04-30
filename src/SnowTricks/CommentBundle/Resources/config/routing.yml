@@ -3,3 +3,9 @@ snow_tricks_comment_add:
     defaults: { _controller: SnowTricksCommentBundle:Comment:add }
     requirements:
             id: '\d+'
+snow_tricks_comment_list_comment_ajax:
+    path:     /comment/trick/{id}/{lastComment}
+    defaults: { _controller: SnowTricksCommentBundle:Comment:listCommentByTrickAndAjax }
+    requirements:
+            id: '\d+'
+            lastComment: '\d+|null'

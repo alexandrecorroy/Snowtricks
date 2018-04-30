@@ -5,6 +5,7 @@ namespace SnowTricks\CommentBundle\Controller;
 use SnowTricks\CommentBundle\Entity\Comment;
 use SnowTricks\CommentBundle\Form\CommentType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -70,6 +71,19 @@ class CommentController extends Controller
         return $this->render('@SnowTricksComment/comments.html.twig', array(
             'comments' => $comments
         ));
+    }
+
+    public function listCommentByTrickAndAjaxAction(Request $request, $id, $lastComment) {
+
+            $em = $this->getDoctrine()->getManager();
+            $comments = $em->getRepository('SnowTricksCommentBundle:Comment')->findOtherComments($id, $lastComment);
+
+            $view = $this->renderView('@SnowTricksComment/infinite_scroll_comments.html.twig', array(
+                'comments' => $comments,
+            ));
+
+            $response = new JsonResponse();
+            return $response->setData($view);
     }
 
 }

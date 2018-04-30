@@ -1,8 +1,8 @@
 <hr class="col-lg-10">
 <aside>
-    <div class="container">
+    <div class="container" id="comments-data">
         {% for comment in comments %}
-        <div class="row">
+        <div class="row listComments" id="{{ comment.id }}">
             <div class="col-lg-7 mx-auto mb-3 mt-2">
                 <div class="panel panel-white post panel-shadow">
                     <div class="post-heading">
@@ -16,6 +16,7 @@
 
                         </div>
                         <div class="text-left meta">
+
                             <div class="title">
                                 <p><b>{{ comment.user.username }}</b> <i class="text-muted time">on {{ comment.createDate|date("F jS \\a\\t g:ia") }}</i></p>
                             </div>
@@ -29,5 +30,8 @@
             </div>
         </div>
         {% endfor %}
+    </div>
+    <div class="ajax-load text-center" style="display:none">
+        <p><img src="http://demo.itsolutionstuff.com/plugin/loader.gif">Loading More post</p>
     </div>
 </aside>
