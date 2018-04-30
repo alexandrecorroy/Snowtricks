@@ -23,7 +23,13 @@ class CommentController extends Controller
 
         $comment = new Comment();
 
-        $form = $this->createForm(CommentType::class, $comment);
+        $form = $this->createForm(CommentType::class, $comment, array(
+            'action' => $this->generateUrl('snow_tricks_comment_add', array(
+                'id' => $id
+            )),
+            'method' => 'POST'
+
+        ));
 
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
@@ -51,6 +57,18 @@ class CommentController extends Controller
 
         return $this->render('@SnowTricksComment/form.html.twig', array(
             'form' => $form->createView(),
+        ));
+    }
+
+    public function listCommentsByTrickAction($id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $comments = $em->getRepository('SnowTricksCommentBundle:Comment')->findAll($id);
+
+        return $this->render('@SnowTricksComment/comments.html.twig', array(
+            'comments' => $comments
         ));
     }
 

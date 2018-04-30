@@ -71,15 +71,21 @@
                 {% endif %}</i>
         </div>
 
-        <aside>
 
-            {{ render(controller(
-                'SnowTricksCommentBundle:Comment:add',
-                { 'id': trick.id }
-            )) }}
+        {% if app.user %}
+        {#Form comment#}
+        {{ render(controller(
+            'SnowTricksCommentBundle:Comment:add',
+            { 'id': trick.id }
+        )) }}
+        {% endif %}
 
-        </aside>
+        {#List comments#}
 
+        {{ render(controller(
+            'SnowTricksCommentBundle:Comment:listCommentsByTrick',
+            { 'id': trick.id }
+        )) }}
 
     </section>
 
