@@ -1,0 +1,70 @@
+.nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.content {
+    position: relative;
+    width: 100%;
+}
+
+.content img {
+    width: 100%;
+    height: auto;
+}
+
+.content .fai{
+    position: absolute;
+    top: 25px;
+    right: 0px;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    color: #212529;
+    font-size: 1.6em;
+    background-color: white;
+    border: 1px solid black;
+}
+
+.fai2{
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    color: #212529;
+    font-size: 1.6em;
+    background-color: white;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.fa-plus-position{
+    font-size: small;
+    position: absolute;
+    top: 4px;
+    left: 8px;
+}
+
+.fa-plus-position2{
+    font-size: small;
+    position: absolute;
+    top: 4px;
+    left: 55px;
+}
+
+.cursor{
+    cursor: pointer;
+    padding:6px;
+}
+
+.cursor:hover{
+    color: darkred;
+}
+
+#addPicture, #snowtricks_trickbundle_trick_pictures, #addVideo, #snowtricks_trickbundle_trick_videos{
+    display: none;
+}
+
+.modal-backdrop{
+    position: unset;
+}

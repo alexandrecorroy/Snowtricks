@@ -2,9 +2,9 @@
 
 namespace SnowTricks\TrickBundle\Form;
 
-use Doctrine\DBAL\Types\BooleanType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,8 +16,14 @@ class PictureType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('file', FileType::class)
-            ->add('alt');
+            ->add('file', FileType::class, array(
+                'data_class' => null,
+                'required' => false
+            ))
+            ->add('fileName', HiddenType::class, array(
+                'required' => false
+            ))
+        ;
     }/**
      * {@inheritdoc}
      */

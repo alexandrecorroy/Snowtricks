@@ -32,7 +32,7 @@ class Trick
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=1024)
+     * @ORM\Column(name="description", type="string", length=2048)
      */
     private $description;
 
@@ -60,19 +60,21 @@ class Trick
      * @var string
      *
      * @ORM\Column(name="front_picture", type="string", length=255)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $frontPicture;
 
+    private $frontPictureName;
+
     /**
-     * @ORM\OneToMany(targetEntity="SnowTricks\TrickBundle\Entity\Picture", mappedBy="trick", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="SnowTricks\TrickBundle\Entity\Picture", mappedBy="trick", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $pictures;
 
     /**
-     * @ORM\OneToMany(targetEntity="SnowTricks\TrickBundle\Entity\Video", mappedBy="trick", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToMany(targetEntity="SnowTricks\TrickBundle\Entity\Video", mappedBy="trick", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
      */
     private $videos;
 
@@ -83,7 +85,7 @@ class Trick
         $this->videos = new ArrayCollection();
     }
 
-    public function addPictures(Picture $picture)
+    public function addPicture(Picture $picture)
     {
         $this->pictures[] = $picture;
 
@@ -92,7 +94,7 @@ class Trick
         return $this;
     }
 
-    public function addVideos(Video $video)
+    public function addVideo(Video $video)
     {
         $this->videos[] = $video;
 
@@ -152,6 +154,24 @@ class Trick
     {
         $this->frontPicture = $frontPicture;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getFrontPictureName()
+    {
+        return $this->frontPictureName;
+    }
+
+    /**
+     * @param mixed $frontPictureName
+     */
+    public function setFrontPictureName($frontPictureName)
+    {
+        $this->frontPictureName = $frontPictureName;
+    }
+
+
 
     /**
      * Get id

@@ -17,6 +17,7 @@
 
     <!-- Custom styles for this template -->
     <link href="{{ asset('css/agency.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
@@ -69,7 +70,6 @@
 <!-- Services -->
 <section id="services">
     <div class="container">
-        {% if app.user %}{{ app.user.username }}{% endif %}
         {% block content %}{% endblock %}
     </div>
 </section>
@@ -124,6 +124,9 @@
                 $(this).remove();
             });
         }, 5000);
+        $('#confirm-delete').on('show.bs.modal', function(e) {
+            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+        });
     </script>
 {% endblock %}
 

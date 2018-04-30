@@ -3,8 +3,6 @@
 namespace SnowTricks\TrickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use SnowTricks\AppBundle\Service\FileUploader;
-use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Picture
@@ -30,12 +28,7 @@ class Picture
      */
     private $file;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="alt", type="string", length=255)
-     */
-    private $alt;
+    private $fileName;
 
     /**
      * @ORM\ManyToOne(targetEntity="SnowTricks\TrickBundle\Entity\Trick", inversedBy="pictures")
@@ -58,25 +51,6 @@ class Picture
     {
         $this->trick = $trick;
     }
-
-    /**
-     * @return string
-     */
-    public function getAlt()
-    {
-        return $this->alt;
-    }
-
-    /**
-     * @param string $alt
-     */
-    public function setAlt($alt)
-    {
-        $this->alt = $alt;
-    }
-
-
-
 
     /**
      * Get id
@@ -112,5 +86,23 @@ class Picture
     {
         return $this->file;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getFileName()
+    {
+        return $this->fileName;
+    }
+
+    /**
+     * @param mixed $fileName
+     */
+    public function setFileName($fileName)
+    {
+        $this->fileName = $fileName;
+    }
+
+
 }
 
