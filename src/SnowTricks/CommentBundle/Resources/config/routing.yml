@@ -1,0 +1,5 @@
+snow_tricks_comment_add:
+    path:     /comment/add/{id}
+    defaults: { _controller: SnowTricksCommentBundle:Comment:add }
+    requirements:
+            id: '\d+'

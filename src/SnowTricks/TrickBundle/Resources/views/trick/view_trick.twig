@@ -5,6 +5,8 @@
 {% block content %}
     <section class="nopadding col-lg-12 mx-auto text-center border border-dark">
 
+        {{ include('@SnowTricksTrick/modals/delete_trick.html.twig') }}
+
         <header class="masthead content" id="front_picture" style="background-image:
                 {% if trick.frontPicture is defined and trick.frontPicture is not null %}
                     url('{{ asset('uploads/pictures/' ~ trick.frontPicture) }}');">
@@ -57,18 +59,31 @@
             </div>
         </div>
 
-        <div class="col-lg-10 mx-auto mt-3">
+        <div class="col-lg-10 mx-auto mt-5 mb-5">
             <p class="text-justify">{{ trick.description }}</p>
         </div>
 
-        <div class="col-lg-2 offset-lg-2 mt-5 mb-5">
-            {{ trick.category.name }}
+        <div class="col-lg-6 mx-auto mb-5">
+            <i class="fa fa-cog"> {{ trick.category.name }}</i> |
+            <i class="fa fa-clock-o"> Added {{ trick.createDate|date("F jS \\a\\t g:ia") }}
+                {% if trick.editDate is not null %}
+                    & Edited {{ trick.editDate|date("F jS \\a\\t g:ia") }}
+                {% endif %}</i>
         </div>
+
+        <aside>
+
+            {{ render(controller(
+                'SnowTricksCommentBundle:Comment:add',
+                { 'id': trick.id }
+            )) }}
+
+        </aside>
 
 
     </section>
 
-    {{ include('@SnowTricksTrick/modals/delete_trick.html.twig') }}
+
 
 {% endblock %}
 

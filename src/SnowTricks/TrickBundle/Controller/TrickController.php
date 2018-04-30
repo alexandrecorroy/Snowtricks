@@ -9,6 +9,7 @@
 namespace SnowTricks\TrickBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use SnowTricks\CommentBundle\Controller\CommentController;
 use SnowTricks\TrickBundle\Entity\Trick;
 use SnowTricks\TrickBundle\Form\TrickType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -59,7 +60,7 @@ class TrickController extends Controller
             }
         }
 
-        return $this->render('@SnowTricksTrick/Trick/form.html.twig', array(
+        return $this->render('@SnowTricksTrick/trick/form.html.twig', array(
             'form' => $form->createView(),
         ));
     }
@@ -176,7 +177,7 @@ class TrickController extends Controller
             }
         }
 
-        return $this->render('@SnowTricksTrick/Trick/form.html.twig', array(
+        return $this->render('@SnowTricksTrick/trick/form.html.twig', array(
             'form' => $form->createView(),
             'trick' => $trick
         ));
@@ -236,7 +237,7 @@ class TrickController extends Controller
             throw new NotFoundHttpException("No trick found.");
         }
 
-        return $this->render('@SnowTricksTrick/Trick/view_trick.twig', array(
+        return $this->render('@SnowTricksTrick/trick/view_trick.twig', array(
             'trick' => $trick
         ));
     }
