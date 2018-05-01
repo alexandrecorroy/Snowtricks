@@ -100,6 +100,11 @@
             var url = "{{ path('snow_tricks_comment_list_comment_ajax', {'id': trick.id, 'lastComment': 'null'})|escape('js') }}";
             url = url.replace('null', '');
 
+            if($(".listComments").length < 10)
+            {
+                stop = 0;
+            }
+
             $(window).scroll(function() {
 
                 if(stop > 0)

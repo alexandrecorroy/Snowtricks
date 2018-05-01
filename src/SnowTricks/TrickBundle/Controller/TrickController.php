@@ -241,4 +241,18 @@ class TrickController extends Controller
             'trick' => $trick
         ));
     }
+
+    public function listTricksAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tricks = $em->getRepository('SnowTricksTrickBundle:Trick')->findAll(array(), array('id' => 'DESC'), 15);
+
+        if (null === $tricks) {
+            throw new NotFoundHttpException("No tricks found.");
+        }
+
+        return $this->render('@SnowTricksTrick/trick/list_tricks_template.twig', array(
+            'tricks' => $tricks
+        ));
+    }
 }

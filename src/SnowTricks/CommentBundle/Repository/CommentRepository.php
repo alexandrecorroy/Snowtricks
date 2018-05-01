@@ -11,9 +11,16 @@ namespace SnowTricks\CommentBundle\Repository;
 class CommentRepository extends \Doctrine\ORM\EntityRepository
 {
 
-    public function findAll()
+    public function findCommentsByTrick($id)
     {
-        return $this->findBy(array(), array('id' => 'DESC'), 10);
+        return $this->createQueryBuilder('comment')
+            ->select('comment')
+            ->orderBy('comment.id', 'DESC')
+            ->andWhere('comment.trick = :id')
+            ->setMaxResults(10)
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getResult();
     }
 
     public function findOtherComments($id, $lastComment)
