@@ -10,4 +10,28 @@ namespace SnowTricks\TrickBundle\Repository;
  */
 class TrickRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function listTricks()
+    {
+        return $this->createQueryBuilder('trick')
+            ->select('trick')
+            ->orderBy('trick.id', 'DESC')
+            ->setMaxResults(15)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    public function findOtherTricks($id)
+    {
+        return $this->createQueryBuilder('trick')
+            ->select('trick')
+            ->orderBy('trick.id', 'DESC')
+            ->andWhere('trick.id < :lastTrick')
+            ->setMaxResults(15)
+            ->setParameter('lastTrick', $id)
+            ->getQuery()
+            ->getResult();
+    }
+
 }

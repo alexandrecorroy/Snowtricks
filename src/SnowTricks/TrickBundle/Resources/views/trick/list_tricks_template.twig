@@ -1,5 +1,5 @@
 {% for trick in tricks %}
-<div class="col-lg-3 portfolio-item">
+<div class="col-lg-3 portfolio-item" id="{{ trick.id }}">
     <a class="portfolio-link" href="{{ path('snow_tricks_trick_view', {id: trick.id}) }}">
         <div class="portfolio-hover">
             <div class="portfolio-hover-content">
