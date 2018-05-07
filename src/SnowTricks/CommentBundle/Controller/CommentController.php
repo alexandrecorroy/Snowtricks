@@ -66,7 +66,7 @@ class CommentController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $comments = $em->getRepository('SnowTricksCommentBundle:Comment')->findAll($id);
+        $comments = $em->getRepository('SnowTricksCommentBundle:Comment')->findCommentsByTrick($id);
 
         return $this->render('@SnowTricksComment/comments.html.twig', array(
             'comments' => $comments

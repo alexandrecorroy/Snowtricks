@@ -173,3 +173,13 @@
 .post .post-footer .comments-list .comment > .comments-list {
     margin-left: 50px;
 }
+
+#topButton {
+    position: fixed;
+    right: 30px;
+    bottom: 35px;
+    display: none;
+}
+#topButton:hover {
+    cursor: pointer;
+}

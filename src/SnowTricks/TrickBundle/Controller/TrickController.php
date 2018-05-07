@@ -13,6 +13,7 @@ use SnowTricks\CommentBundle\Controller\CommentController;
 use SnowTricks\TrickBundle\Entity\Trick;
 use SnowTricks\TrickBundle\Form\TrickType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
@@ -46,6 +47,9 @@ class TrickController extends Controller
 
                     $trick->addVideo($video);
                 }
+
+                // add slug
+                $trick->setSlug($trick->getName());
 
 
                 $em->persist($trick);
@@ -162,6 +166,9 @@ class TrickController extends Controller
                 // update edit date
                 $trick->setEditDate(new \DateTime());
 
+                // update slug
+                $trick->setSlug($trick->getName());
+
 
                 $em->persist($trick);
                 $em->flush();
@@ -228,10 +235,10 @@ class TrickController extends Controller
 
     }
 
-    public function viewAction($id)
+    public function viewAction($slug)
     {
         $em = $this->getDoctrine()->getManager();
-        $trick = $em->getRepository('SnowTricksTrickBundle:Trick')->find($id);
+        $trick = $em->getRepository('SnowTricksTrickBundle:Trick')->findOneBy(array('slug' => $slug));
 
         if (null === $trick) {
             throw new NotFoundHttpException("No trick found.");
@@ -240,5 +247,32 @@ class TrickController extends Controller
         return $this->render('@SnowTricksTrick/trick/view_trick.twig', array(
             'trick' => $trick
         ));
+    }
+
+    public function listTricksAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tricks = $em->getRepository('SnowTricksTrickBundle:Trick')->listTricks();
+
+        if (null === $tricks) {
+            throw new NotFoundHttpException("No tricks found.");
+        }
+
+        return $this->render('@SnowTricksTrick/trick/list_tricks_template.twig', array(
+            'tricks' => $tricks
+        ));
+    }
+
+    public function listTricksAjaxAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tricks = $em->getRepository('SnowTricksTrickBundle:Trick')->findOtherTricks($id);
+
+        $view = $this->renderView('@SnowTricksTrick/trick/list_tricks_template.twig', array(
+            'tricks' => $tricks,
+        ));
+
+        $response = new JsonResponse();
+        return $response->setData($view);
     }
 }

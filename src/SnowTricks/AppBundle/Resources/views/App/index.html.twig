@@ -8,47 +8,108 @@
         <div class="intro-text">
             <div class="intro-lead-in">Bienvenue sur SnowTricks !</div>
             <div class="intro-heading text-uppercase">Le Wiki du snowboard</div>
-            <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="#services">Tell Me More</a>
+            <a class="btn btn-primary btn-xl js-scroll-trigger" href="#services">See Tricks</a>
         </div>
     </div>
 </header>
 {% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-lg-12 text-center">
-        <h2 class="section-heading text-uppercase">Tricks</h2>
-        <h3 class="section-subheading text-muted">You can see here all tricks.</h3>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-4 col-sm-6 portfolio-item">
-        <a class="portfolio-link" data-toggle="modal" href="#portfolioModal5">
-            <div class="portfolio-hover">
-                <div class="portfolio-hover-content">
-                    <i class="fa fa-plus fa-3x"></i>
-                </div>
-            </div>
-            <img class="img-fluid" src="img/portfolio/05-thumbnail.jpg" alt="">
-        </a>
-        <div class="portfolio-caption">
-            <h4>Southwest</h4>
-            <p class="text-muted">Website Design</p>
+
+    <section>
+        <div class="row" id="tricks-data">
+            {{ render(controller('SnowTricksTrickBundle:Trick:listTricks')) }}
         </div>
-    </div>
-    <div class="col-md-4 col-sm-6 portfolio-item">
-        <a class="portfolio-link" data-toggle="modal" href="#portfolioModal6">
-            <div class="portfolio-hover">
-                <div class="portfolio-hover-content">
-                    <i class="fa fa-plus fa-3x"></i>
-                </div>
-            </div>
-            <img class="img-fluid" src="img/portfolio/06-thumbnail.jpg" alt="">
-        </a>
-        <div class="portfolio-caption">
-            <h4>Window</h4>
-            <p class="text-muted">Photography</p>
+        <div class="ajax-load text-center" style="display:none">
+            <p><img src="http://demo.itsolutionstuff.com/plugin/loader.gif">Loading More post</p>
         </div>
-    </div>
-</div>
+    </section>
+
+    {{ include('@SnowTricksTrick/modals/delete_trick.html.twig') }}
+
+    <i id="topButton" title="back to top" class="fa fa-arrow-up fa-5x"></i>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+    <script type="text/javascript">
+        var tricksLength = 15;
+        var stop = 1;
+        var url = "{{ path('snow_tricks_list_tricks_ajax', {'id': 'null'})|escape('js') }}";
+        url = url.replace('null', '');
+
+        if($(".portfolio-item").length < tricksLength)
+        {
+            stop = 0;
+        }
+
+        $(window).scroll(function() {
+
+            if(stop > 0)
+            {
+                if($(window).scrollTop() + $(window).height() >= $(document).height()) {
+                    var last_id = $(".portfolio-item:last").attr("id");
+                    loadMoreData(last_id);
+                }
+            }
+
+        });
+
+
+        function loadMoreData(last_id){
+            $.ajax(
+                {
+                    url: url+last_id,
+                    type: "get",
+                    beforeSend: function()
+                    {
+                        $('.ajax-load').show();
+
+                    }
+                })
+                .done(function(data)
+                {
+                    if(!data)
+                        stop--;
+
+                    $('.ajax-load').hide();
+                    $("#tricks-data").append(data);
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError)
+                {
+                    alert('server not responding...');
+                });
+        }
+
+        $.fn.scrollToTop=function(options){
+            if(options.speed){var  speed=options.speed;}else{var speed="slow";}
+            if(options.ease){var  ease=options.ease;}else{var ease="jswing";}
+            if(options.start){var  start=options.start;}else{var start="0";}
+            var  scrollDiv=$(this);$(this).hide().removeAttr("href");
+            if($(window).scrollTop()>start){
+                $(this).fadeIn("slow");}
+            $(window).scroll(function(){
+                if($(window).scrollTop()>start){
+                    $(scrollDiv).fadeIn("slow");
+                } else{
+                    $(scrollDiv).fadeOut("slow");
+                }
+            });
+            $(this).click(function(event){
+                $("html,  body").animate({scrollTop:"0px"},speed,ease);
+            });
+        };
+
+        if($(".portfolio-item").length >= tricksLength)
+        {
+            $("#topButton").scrollToTop({
+                speed:1800,
+                ease:"jswing",
+                start:250});
+        }
+
+    </script>
+
 {% endblock %}
