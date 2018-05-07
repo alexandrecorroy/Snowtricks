@@ -19,6 +19,7 @@ security:
             #- { path: ^/trick/add, role: ROLE_USER }
             #- { path: ^/trick/edit, role: ROLE_USER }
             - { path: ^/comment/add, role: ROLE_USER }
+            - { path: ^/dashboard, role: ROLE_USER }
 
     firewalls:
         dev:

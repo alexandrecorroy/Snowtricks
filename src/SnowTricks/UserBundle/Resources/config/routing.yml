@@ -10,3 +10,11 @@ snow_tricks_user_forgotPassword:
 snow_tricks_user_resetPassword:
     path:     /reset_password/{token}
     defaults: { _controller: SnowTricksUserBundle:Security:resetPassword }
+snow_tricks_user_dashboard:
+    path:     /dashboard
+    defaults: { _controller: SnowTricksUserBundle:User:dashboard }
+snow_tricks_user_dashboard_deletePicture:
+    path:     /dashboard/user/{id}/deletePicture
+    defaults: { _controller: SnowTricksUserBundle:User:deleteUserPicture }
+    requirements:
+            id: '\d+'

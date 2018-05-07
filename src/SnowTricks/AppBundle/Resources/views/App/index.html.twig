@@ -26,17 +26,21 @@
     </section>
 
     {{ include('@SnowTricksTrick/modals/delete_trick.html.twig') }}
+
+    <i id="topButton" title="back to top" class="fa fa-arrow-up fa-5x"></i>
+
 {% endblock %}
 
 {% block javascripts %}
 
     {{ parent() }}
     <script type="text/javascript">
+        var tricksLength = 15;
         var stop = 1;
         var url = "{{ path('snow_tricks_list_tricks_ajax', {'id': 'null'})|escape('js') }}";
         url = url.replace('null', '');
 
-        if($(".portfolio-item").length < 15)
+        if($(".portfolio-item").length < tricksLength)
         {
             stop = 0;
         }
@@ -78,6 +82,34 @@
                     alert('server not responding...');
                 });
         }
+
+        $.fn.scrollToTop=function(options){
+            if(options.speed){var  speed=options.speed;}else{var speed="slow";}
+            if(options.ease){var  ease=options.ease;}else{var ease="jswing";}
+            if(options.start){var  start=options.start;}else{var start="0";}
+            var  scrollDiv=$(this);$(this).hide().removeAttr("href");
+            if($(window).scrollTop()>start){
+                $(this).fadeIn("slow");}
+            $(window).scroll(function(){
+                if($(window).scrollTop()>start){
+                    $(scrollDiv).fadeIn("slow");
+                } else{
+                    $(scrollDiv).fadeOut("slow");
+                }
+            });
+            $(this).click(function(event){
+                $("html,  body").animate({scrollTop:"0px"},speed,ease);
+            });
+        };
+
+        if($(".portfolio-item").length >= tricksLength)
+        {
+            $("#topButton").scrollToTop({
+                speed:1800,
+                ease:"jswing",
+                start:250});
+        }
+
     </script>
 
 {% endblock %}

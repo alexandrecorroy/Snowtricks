@@ -10,6 +10,7 @@ namespace SnowTricks\TrickBundle\EventListener;
 use SnowTricks\AppBundle\Service\FileUploader;
 use SnowTricks\TrickBundle\Entity\Picture;
 use SnowTricks\TrickBundle\Entity\Trick;
+use SnowTricks\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -61,6 +62,17 @@ class PictureUploadListener
 
             $fileName = $this->uploader->upload($file);
             $entity->setFrontPicture($fileName);
+        }
+
+        if ($entity instanceof User) {
+            $file = $entity->getPicture();
+
+            if (!$file instanceof UploadedFile) {
+                return;
+            }
+
+            $fileName = $this->uploader->upload($file);
+            $entity->setPicture($fileName);
         }
 
     }
