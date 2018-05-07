@@ -1,6 +1,6 @@
 <?php
 
-namespace SnowTricks\TrickBundle\Repository;
+namespace SnowTricks\CommentBundle\Repository;
 
 /**
  * CommentRepository

@@ -1,3 +1,18 @@
-snow_tricks_trick_homepage:
-    path:     /autre
-    defaults: { _controller: SnowTricksTrickBundle:Default:index }
+snow_tricks_trick_add:
+    path:     /trick/add
+    defaults: { _controller: SnowTricksTrickBundle:Trick:add }
+snow_tricks_trick_edit:
+    path:     /trick/edit/{id}
+    defaults: { _controller: SnowTricksTrickBundle:Trick:edit }
+    requirements:
+            id: '\d+'
+snow_tricks_trick_delete:
+    path:     /trick/delete/{id}/{csrf}
+    defaults: { _controller: SnowTricksTrickBundle:Trick:delete }
+    requirements:
+            id: '\d+'
+snow_tricks_trick_view:
+    path:     /trick/{id}
+    defaults: { _controller: SnowTricksTrickBundle:Trick:view }
+    requirements:
+            id: '\d+'

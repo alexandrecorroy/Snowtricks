@@ -1,0 +1,78 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ trick.name }}{% endblock %}
+
+{% block content %}
+    <section class="nopadding col-lg-12 mx-auto text-center border border-dark">
+
+        <header class="masthead content" id="front_picture" style="background-image:
+                {% if trick.frontPicture is defined and trick.frontPicture is not null %}
+                    url('{{ asset('uploads/pictures/' ~ trick.frontPicture) }}');">
+                {% else %}
+                        url('/img/none.png');">
+                {% endif %}
+            {% if app.user %}
+            <div class="fai">
+                <a href="{{ path('snow_tricks_trick_edit', {id: trick.id}) }}"><i class="fa fa-pencil cursor"></i></a>
+                <a href="#" data-href="{{ path('snow_tricks_trick_delete', {id: trick.id, csrf: csrf_token('delete-item')}) }}" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash cursor"></i></a>
+            </div>
+            {% endif %}
+            <div class="intro-text">
+
+                <div class="intro-heading col-lg-4 mx-auto text-center">
+                    {{ trick.name }}
+                </div>
+
+            </div>
+        </header>
+
+            <div class="album py-5 bg">
+                <div class="container">
+                    <div class="row">
+                            {% for picture in trick.pictures %}
+                            <div class="col-md-2" id="addPicture{{ loop.index0 }}">
+                                <div class="card mb-4 box-shadow">
+                                    <a href="{{ asset('uploads/pictures/' ~ picture.file) }}"><img class="card-img-top" src="{{ asset('uploads/pictures/' ~ picture.file) }}" alt="none" height="150px"></a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+
+        <div class="album bg">
+            <div class="container">
+                <div class="row">
+                    {% if trick.videos is defined %}
+                        {% for video in trick.videos %}
+                        <div class="col-md-4" id="addVideo{{ loop.index0 }}">
+                            <div class="card mb-4 box-shadow">
+                                <iframe src="{{ video.url }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-10 mx-auto mt-3">
+            <p class="text-justify">{{ trick.description }}</p>
+        </div>
+
+        <div class="col-lg-2 offset-lg-2 mt-5 mb-5">
+            {{ trick.category.name }}
+        </div>
+
+
+    </section>
+
+    {{ include('@SnowTricksTrick/modals/delete_trick.html.twig') }}
+
+{% endblock %}
+
+{% block javascripts %}
+        {{ parent() }}
+    <script src="{{ asset('js/js.js') }}"></script>
+{% endblock %}

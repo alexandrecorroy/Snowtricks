@@ -1,3 +1,7 @@
+snow_tricks_comment:
+    resource: "@SnowTricksCommentBundle/Resources/config/routing.yml"
+    prefix:   /
+
 snow_tricks_trick:
     resource: "@SnowTricksTrickBundle/Resources/config/routing.yml"
     prefix:   /

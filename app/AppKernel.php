@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new SnowTricks\UserBundle\SnowTricksUserBundle(),
             new SnowTricks\AppBundle\SnowTricksAppBundle(),
             new SnowTricks\TrickBundle\SnowTricksTrickBundle(),
+            new SnowTricks\CommentBundle\SnowTricksCommentBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

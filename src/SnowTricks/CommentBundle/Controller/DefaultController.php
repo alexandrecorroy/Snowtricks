@@ -1,6 +1,6 @@
 <?php
 
-namespace SnowTricks\TrickBundle\Controller;
+namespace SnowTricks\CommentBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -8,6 +8,6 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('SnowTricksTrickBundle:Default:index.html.twig');
+        return $this->render('SnowTricksCommentBundle:Default:index.html.twig');
     }
 }

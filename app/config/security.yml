@@ -10,21 +10,21 @@ security:
 
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
-      # … vous pouvez supprimer le fournisseur « in_memory »
-      # Et voici notre nouveau fournisseur :
         main:
             entity:
                 class:    SnowTricks\UserBundle\Entity\User
                 property: username
 
     access_control:
-            #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+            #- { path: ^/trick/add, role: ROLE_USER }
+            #- { path: ^/trick/edit, role: ROLE_USER }
 
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            logout_on_user_change: true
             pattern:   ^/
             anonymous: true
             provider: main

@@ -5,12 +5,12 @@ namespace SnowTricks\TrickBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Media
+ * Picture
  *
- * @ORM\Table(name="media")
- * @ORM\Entity(repositoryClass="SnowTricks\TrickBundle\Repository\MediaRepository")
+ * @ORM\Table(name="picture")
+ * @ORM\Entity(repositoryClass="SnowTricks\TrickBundle\Repository\PictureRepository")
  */
-class Media
+class Picture
 {
     /**
      * @var int
@@ -24,19 +24,14 @@ class Media
     /**
      * @var string
      *
-     * @ORM\Column(name="path", type="string", length=255)
+     * @ORM\Column(name="file", type="string", length=255)
      */
-    private $path;
+    private $file;
+
+    private $fileName;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="type", type="boolean")
-     */
-    private $type;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="SnowTricks\TrickBundle\Entity\Trick")
+     * @ORM\ManyToOne(targetEntity="SnowTricks\TrickBundle\Entity\Trick", inversedBy="pictures")
      * @ORM\JoinColumn(nullable=false)
      */
     private $trick;
@@ -57,9 +52,6 @@ class Media
         $this->trick = $trick;
     }
 
-
-
-
     /**
      * Get id
      *
@@ -71,51 +63,46 @@ class Media
     }
 
     /**
-     * Set path
+     * Set file
      *
-     * @param string $path
+     * @param string $file
      *
-     * @return Media
+     * @return Picture
      */
-    public function setPath($path)
+    public function setFile($file)
     {
-        $this->path = $path;
+
+        $this->file = $file;
 
         return $this;
     }
 
     /**
-     * Get path
+     * Get file
      *
      * @return string
      */
-    public function getPath()
+    public function getFile()
     {
-        return $this->path;
+        return $this->file;
     }
 
     /**
-     * Set type
-     *
-     * @param boolean $type
-     *
-     * @return Media
+     * @return mixed
      */
-    public function setType($type)
+    public function getFileName()
     {
-        $this->type = $type;
-
-        return $this;
+        return $this->fileName;
     }
 
     /**
-     * Get type
-     *
-     * @return bool
+     * @param mixed $fileName
      */
-    public function getType()
+    public function setFileName($fileName)
     {
-        return $this->type;
+        $this->fileName = $fileName;
     }
+
+
 }
 
