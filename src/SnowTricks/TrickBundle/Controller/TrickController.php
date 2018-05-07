@@ -48,6 +48,9 @@ class TrickController extends Controller
                     $trick->addVideo($video);
                 }
 
+                // add slug
+                $trick->setSlug($trick->getName());
+
 
                 $em->persist($trick);
                 $em->flush();
@@ -163,6 +166,9 @@ class TrickController extends Controller
                 // update edit date
                 $trick->setEditDate(new \DateTime());
 
+                // update slug
+                $trick->setSlug($trick->getName());
+
 
                 $em->persist($trick);
                 $em->flush();
@@ -229,10 +235,10 @@ class TrickController extends Controller
 
     }
 
-    public function viewAction($id)
+    public function viewAction($slug)
     {
         $em = $this->getDoctrine()->getManager();
-        $trick = $em->getRepository('SnowTricksTrickBundle:Trick')->find($id);
+        $trick = $em->getRepository('SnowTricksTrickBundle:Trick')->findOneBy(array('slug' => $slug));
 
         if (null === $trick) {
             throw new NotFoundHttpException("No trick found.");

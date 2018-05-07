@@ -32,6 +32,13 @@ class Trick
     /**
      * @var string
      *
+     * @ORM\Column(name="slug", type="string", length=64, nullable=true)
+     */
+    private $slug;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="description", type="string", length=2048)
      */
     private $description;
@@ -59,7 +66,7 @@ class Trick
     /**
      * @var string
      *
-     * @ORM\Column(name="front_picture", type="string", length=255)
+     * @ORM\Column(name="front_picture", type="string", length=255, nullable=true)
      * @ORM\JoinColumn(nullable=true)
      */
     private $frontPicture;
@@ -278,5 +285,40 @@ class Trick
     {
         return $this->editDate;
     }
+
+    /**
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string $slug
+     */
+    public function setSlug($slug)
+    {
+        // replace non letter or digits by -
+        $slug = preg_replace('~[^\pL\d]+~u', '-', $slug);
+
+        // transliterate
+        $slug = iconv('utf-8', 'us-ascii//TRANSLIT', $slug);
+
+        // remove unwanted characters
+        $slug = preg_replace('~[^-\w]+~', '', $slug);
+
+        // trim
+        $slug = trim($slug, '-');
+
+        // remove duplicated - symbols
+        $slug = preg_replace('~-+~', '-', $slug);
+
+        // lowercase
+        $slug = strtolower($slug);
+
+        $this->slug = $slug;
+    }
+
 }
 

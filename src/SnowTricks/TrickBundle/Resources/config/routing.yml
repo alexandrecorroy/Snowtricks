@@ -12,10 +12,8 @@ snow_tricks_trick_delete:
     requirements:
             id: '\d+'
 snow_tricks_trick_view:
-    path:     /trick/{id}
+    path:     /trick/{slug}
     defaults: { _controller: SnowTricksTrickBundle:Trick:view }
-    requirements:
-            id: '\d+'
 snow_tricks_list_tricks_ajax:
     path:     /trick/ajax/{id}
     defaults: { _controller: SnowTricksTrickBundle:Trick:listTricksAjax }
