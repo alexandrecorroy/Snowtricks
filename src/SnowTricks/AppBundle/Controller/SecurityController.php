@@ -42,29 +42,27 @@ class SecurityController extends Controller
 
         $form = $this->createForm(RegistrationType::class, $user);
 
-        if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
+        $form->handleRequest($request);
 
-            if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
-                $user->setToken($this::generateToken($user));
+            $user->setToken($this::generateToken($user));
 
-                $user->setPassword($this->encodePassword($user, $user->getPassword()));
+            $user->setPassword($this->encodePassword($user, $user->getPassword()));
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
 
 
-                $this->sendMail($user, 'Confirmer votre compte', 'registration');
+            $this->sendMail($user, 'Confirmer votre compte', 'registration');
 
-                $this->addFlash(
-                    'notice',
-                    'An email sent to you for verify account !'
-                );
+            $this->addFlash(
+                'notice',
+                'An email sent to you for verify account !'
+            );
 
-                return $this->redirectToRoute('snow_tricks_homepage');
-            }
+            return $this->redirectToRoute('snow_tricks_homepage');
         }
 
         return $this->render('@SnowTricksApp/User/Security/registration.html.twig', array(
@@ -144,33 +142,31 @@ class SecurityController extends Controller
 
         $form = $this->createForm(ForgotPasswordType::class);
 
-        if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
+        $form->handleRequest($request);
 
-            if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
-                $repository = $this->getDoctrine()->getRepository(User::class);
+            $repository = $this->getDoctrine()->getRepository(User::class);
 
-                $user = $repository->findOneBy(
-                    array('username' => $request->get('username'))
-                );
+            $user = $repository->findOneBy(
+                array('username' => $request->get('username'))
+            );
 
-                if($user)
-                {
+            if($user)
+            {
 
-                    $user->setToken($this::generateToken($user));
+                $user->setToken($this::generateToken($user));
 
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($user);
-                    $em->flush();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($user);
+                $em->flush();
 
-                    $this->sendMail($user, 'Reset your password', 'forgot_password');
-                }
-
-                $request->getSession()->getFlashBag()->add('notice', 'An email send to you for reset password !');
-
-                return $this->redirectToRoute('snow_tricks_user_forgotPassword');
+                $this->sendMail($user, 'Reset your password', 'forgot_password');
             }
+
+            $request->getSession()->getFlashBag()->add('notice', 'An email send to you for reset password !');
+
+            return $this->redirectToRoute('snow_tricks_user_forgotPassword');
         }
 
         return $this->render('@SnowTricksApp/User/Security/forgot_password.html.twig', array(
@@ -209,38 +205,36 @@ class SecurityController extends Controller
         $form = $this->createForm(ResetPasswordType::class);
 
         // si formulaire rempli et valide
-        if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
+        $form->handleRequest($request);
 
-            if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
-                // on récupére le user via email du form
-                $repository = $this->getDoctrine()->getRepository(User::class);
+            // on récupére le user via email du form
+            $repository = $this->getDoctrine()->getRepository(User::class);
 
-                $user = $repository->findOneBy(
-                    array('email' => $request->get('email'))
-                );
+            $user = $repository->findOneBy(
+                array('email' => $request->get('email'))
+            );
 
-                // compare si userToken et user === username
-                if($user->getUsername()===$userToken->getUsername())
-                {
+            // compare si userToken et user === username
+            if($user->getUsername()===$userToken->getUsername())
+            {
 
-                    // on modifie le mot de passe de user
-                    $user->setPassword($this->encodePassword($user, $request->get('password')));
+                // on modifie le mot de passe de user
+                $user->setPassword($this->encodePassword($user, $request->get('password')));
 
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($user);
-                    $em->flush();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($user);
+                $em->flush();
 
-                }
-
-                // renvoi sur home avec message
-                $this->addFlash(
-                    'notice',
-                    'Password has been changed !'
-                );
-                return $this->redirectToRoute('snow_tricks_homepage');
             }
+
+            // renvoi sur home avec message
+            $this->addFlash(
+                'notice',
+                'Password has been changed !'
+            );
+            return $this->redirectToRoute('snow_tricks_homepage');
         }
 
         return $this->render('@SnowTricksApp/User/Security/reset_password.html.twig', array(

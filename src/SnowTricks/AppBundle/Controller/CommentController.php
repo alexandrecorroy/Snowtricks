@@ -9,7 +9,6 @@ use SnowTricks\AppBundle\Entity\Trick;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class CommentController extends Controller
@@ -31,28 +30,26 @@ class CommentController extends Controller
 
         ));
 
-        if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
+        $form->handleRequest($request);
 
-            if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
-                $em = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
 
-                $comment->setTrick($trick);
-                $comment->setUser($this->getUser());
+            $comment->setTrick($trick);
+            $comment->setUser($this->getUser());
 
-                $em->persist($comment);
-                $em->flush();
+            $em->persist($comment);
+            $em->flush();
 
-                $this->addFlash(
-                    'notice',
-                    'Message Added !'
-                );
+            $this->addFlash(
+                'notice',
+                'Message Added !'
+            );
 
-                return $this->redirectToRoute('snow_tricks_trick_view', array(
-                    'slug' => $trick->getSlug()
-                ));
-            }
+            return $this->redirectToRoute('snow_tricks_trick_view', array(
+                'slug' => $trick->getSlug()
+            ));
         }
 
         return $this->render('@SnowTricksApp/Comment/form.html.twig', array(

@@ -30,42 +30,40 @@ class TrickController extends Controller
 
         $form = $this->createForm(TrickType::class, $trick);
 
-        if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
+        $form->handleRequest($request);
 
-            if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
-                $em = $this->getDoctrine()->getManager();
-                $files = $trick->getPictures();
-                $videos = $trick->getVideos();
-
-
-                foreach($files as $file)
-                {
-
-                    $trick->addPicture($file);
-                }
-
-                foreach($videos as $video)
-                {
-
-                    $trick->addVideo($video);
-                }
-
-                // add slug
-                $trick->setSlug($trick->getName());
+            $em = $this->getDoctrine()->getManager();
+            $files = $trick->getPictures();
+            $videos = $trick->getVideos();
 
 
-                $em->persist($trick);
-                $em->flush();
+            foreach($files as $file)
+            {
 
-                $this->addFlash(
-                    'notice',
-                    'Trick Added !'
-                );
-
-                return $this->redirectToRoute('snow_tricks_homepage');
+                $trick->addPicture($file);
             }
+
+            foreach($videos as $video)
+            {
+
+                $trick->addVideo($video);
+            }
+
+            // add slug
+            $trick->setSlug($trick->getName());
+
+
+            $em->persist($trick);
+            $em->flush();
+
+            $this->addFlash(
+                'notice',
+                'Trick Added !'
+            );
+
+            return $this->redirectToRoute('snow_tricks_homepage');
         }
 
         return $this->render('@SnowTricksApp/Trick/form.html.twig', array(
@@ -100,88 +98,85 @@ class TrickController extends Controller
 
         $form = $this->createForm(TrickType::class, $trick);
 
-        if ($request->isMethod('POST')) {
+        $form->handleRequest($request);
 
-            $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
 
-            if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $files = $trick->getPictures();
+            $videos = $trick->getVideos();
 
-                $em = $this->getDoctrine()->getManager();
-                $files = $trick->getPictures();
-                $videos = $trick->getVideos();
-
-                // remove the relationship between the videos and the Trick
-                foreach ($originalVideos as $video) {
-                    if (false === $videos->contains($video)) {
-                        $em->remove($video);
-                    }
+            // remove the relationship between the videos and the Trick
+            foreach ($originalVideos as $video) {
+                if (false === $videos->contains($video)) {
+                    $em->remove($video);
                 }
-
-                //remove the relationship between the picture and the Trick
-                foreach ($originalPictures as $picture) {
-                    if (false === $files->contains($picture)) {
-                        $em->remove($picture);
-                        $this->removeFile($picture->getFileName());
-                    }
-                }
-
-                //set filename to file on unchange files and add news pictures
-                foreach ($files as $file) {
-                    if ($file->getId() !== null && $file->getFile() === null) {
-                        $file->setFile($file->getFileName());
-                    }
-                    elseif ($file->getId() === null && $file->getFile() !== null)
-                    {
-                        $trick->addPicture($file);
-                    }
-                    elseif ($file->getId() !== null && $file->getFile() !== null)
-                    {
-                        $trick->addPicture($file);
-                        $this->removeFile($file->getFileName());
-
-                    }
-                }
-
-                //set filename to frontPicture on unchange files and add news pictures
-                if($trick->getFrontPicture() === null && $trick->getFrontPictureName() !== null)
-                {
-                    $trick->setFrontPicture($trick->getFrontPictureName());
-                }
-                else
-                {
-                    if($trick->getFrontPictureName() !== null)
-                    {
-                        $this->removeFile($trick->getFrontPictureName());
-                    }
-
-                }
-
-
-                // add new videos
-                foreach($videos as $video)
-                {
-                    $trick->addVideo($video);
-                }
-
-                // update edit date
-                $trick->setEditDate(new \DateTime());
-
-                // update slug
-                $trick->setSlug($trick->getName());
-
-
-                $em->persist($trick);
-                $em->flush();
-
-                $this->addFlash(
-                    'notice',
-                    'Trick Edited !'
-                );
-
-                return $this->redirectToRoute('snow_tricks_trick_view', array(
-                    'slug' => $trick->getSlug()
-                ));
             }
+
+            //remove the relationship between the picture and the Trick
+            foreach ($originalPictures as $picture) {
+                if (false === $files->contains($picture)) {
+                    $em->remove($picture);
+                    $this->removeFile($picture->getFileName());
+                }
+            }
+
+            //set filename to file on unchange files and add news pictures
+            foreach ($files as $file) {
+                if ($file->getId() !== null && $file->getFile() === null) {
+                    $file->setFile($file->getFileName());
+                }
+                elseif ($file->getId() === null && $file->getFile() !== null)
+                {
+                    $trick->addPicture($file);
+                }
+                elseif ($file->getId() !== null && $file->getFile() !== null)
+                {
+                    $trick->addPicture($file);
+                    $this->removeFile($file->getFileName());
+
+                }
+            }
+
+            //set filename to frontPicture on unchange files and add news pictures
+            if($trick->getFrontPicture() === null && $trick->getFrontPictureName() !== null)
+            {
+                $trick->setFrontPicture($trick->getFrontPictureName());
+            }
+            else
+            {
+                if($trick->getFrontPictureName() !== null)
+                {
+                    $this->removeFile($trick->getFrontPictureName());
+                }
+
+            }
+
+
+            // add new videos
+            foreach($videos as $video)
+            {
+                $trick->addVideo($video);
+            }
+
+            // update edit date
+            $trick->setEditDate(new \DateTime());
+
+            // update slug
+            $trick->setSlug($trick->getName());
+
+
+            $em->persist($trick);
+            $em->flush();
+
+            $this->addFlash(
+                'notice',
+                'Trick Edited !'
+            );
+
+            return $this->redirectToRoute('snow_tricks_trick_view', array(
+                'slug' => $trick->getSlug()
+            ));
         }
 
         return $this->render('@SnowTricksApp/Trick/form.html.twig', array(
