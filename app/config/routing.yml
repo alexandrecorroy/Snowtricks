@@ -1,20 +1,5 @@
-snow_tricks_comment:
-    resource: "@SnowTricksCommentBundle/Controller/"
-    type: annotation
-    prefix:   /
-
-snow_tricks_trick:
-    resource: "@SnowTricksTrickBundle/Controller/"
-    type: annotation
-    prefix:   /
-
 snow_tricks_app:
     resource: "@SnowTricksAppBundle/Controller/"
-    type: annotation
-    prefix:   /
-
-snow_tricks_user:
-    resource: '@SnowTricksUserBundle/Controller/'
     type: annotation
     prefix:   /
 

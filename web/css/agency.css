@@ -292,10 +292,6 @@ header.masthead .intro-text .intro-heading {
   font-family: 'Droid Serif', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-#services * {
-  z-index: 2;
-}
-
 @media (min-width: 767px) {
   #services .portfolio-item {
     margin: 0 0 30px;

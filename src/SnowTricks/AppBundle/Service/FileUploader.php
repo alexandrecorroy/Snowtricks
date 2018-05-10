@@ -8,7 +8,6 @@
 
 namespace SnowTricks\AppBundle\Service;
 
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileUploader

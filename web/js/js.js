@@ -18,15 +18,15 @@ $(document).ready(function() {
         }
     }
 
-    $("#snowtricks_trickbundle_trick_frontPicture").change(function(){
+    $("#snowtricks_appbundle_trick_frontPicture").change(function(){
         changeFrontPicture(this);
     });
 
     $('#resetFrontPicture').click(function () {
         var2 = '/img/none.png';
         $('#front_picture').css('background-image', 'url('+var2+')');
-        $("#snowtricks_trickbundle_trick_frontPicture").val('');
-        $("#snowtricks_trickbundle_trick_frontPictureName").val('');
+        $("#snowtricks_appbundle_trick_frontPicture").val('');
+        $("#snowtricks_appbundle_trick_frontPictureName").val('');
     });
 
     // partie vignette
@@ -49,7 +49,7 @@ $(document).ready(function() {
     $('.deletePicture').on('click', function() {
         var $str = $(this).parent().parent().parent().parent().parent().attr('id');
         $id = $str.replace("addPicture", "");
-        var $div = '#snowtricks_trickbundle_trick_pictures_'+$id;
+        var $div = '#snowtricks_appbundle_trick_pictures_'+$id;
         $($div).parent().remove();
         $('#addPicture'+$id).remove()
     });
@@ -57,7 +57,7 @@ $(document).ready(function() {
     $('.addPicture').click(function(){
         var $str = $(this).parent().parent().parent().parent().parent().attr('id');
         $id = $str.replace("addPicture", "");
-        $('#snowtricks_trickbundle_trick_pictures_'+$id+'_file').trigger('click');
+        $('#snowtricks_appbundle_trick_pictures_'+$id+'_file').trigger('click');
         onChange($id);
     });
 
@@ -75,7 +75,7 @@ $(document).ready(function() {
     }
 
     function onChange($id) {
-        $('#snowtricks_trickbundle_trick_pictures_'+$id+'_file').change(function(){
+        $('#snowtricks_appbundle_trick_pictures_'+$id+'_file').change(function(){
             changePicture(this, $id);
         });
     }
@@ -106,7 +106,7 @@ $(document).ready(function() {
     $('.deleteVideo').on('click', function() {
         var $str = $(this).parent().parent().parent().parent().parent().attr('id');
         $id = $str.replace("addVideo", "");
-        var $div = '#snowtricks_trickbundle_trick_videos_'+$id;
+        var $div = '#snowtricks_appbundle_trick_videos_'+$id;
         $($div).parent().remove();
         $('#addVideo'+$id).remove();
     });
@@ -126,7 +126,7 @@ $(document).ready(function() {
 
     function saveVideo($id) {
         var $url = $('#modalVideo'+$id).find('input').val();
-        $('#snowtricks_trickbundle_trick_videos_'+$id+'_url').val($url);
+        $('#snowtricks_appbundle_trick_videos_'+$id+'_url').val($url);
         $('#modalVideo'+$id).modal('toggle');
         $('#addVideo'+$id).find('iframe').attr('src', $url);
     }
@@ -134,7 +134,7 @@ $(document).ready(function() {
     // partie ajout dynamique form
 
     // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
-    var $container = $('div#snowtricks_trickbundle_trick_pictures');
+    var $container = $('div#snowtricks_appbundle_trick_pictures');
 
     // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
     var $index1 = $container.find('.form-control-file').length;
@@ -195,7 +195,7 @@ $(document).ready(function() {
 
     //    Video ////////////////////////////////
 
-    var $container2 = $('div#snowtricks_trickbundle_trick_videos');
+    var $container2 = $('div#snowtricks_appbundle_trick_videos');
 
     // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
     var $index = $container2.find(':input').length;

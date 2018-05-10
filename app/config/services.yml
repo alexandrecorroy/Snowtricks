@@ -20,7 +20,7 @@ services:
         arguments: ['%pictures_directory%']
 
     trick.doctrine_image_listener:
-            class: SnowTricks\TrickBundle\EventListener\PictureUploadListener
+            class: SnowTricks\AppBundle\EventListener\PictureUploadListener
             arguments: ['@trick.image_uploader']
             tags:
                 - { name: doctrine.event_listener, event: prePersist }

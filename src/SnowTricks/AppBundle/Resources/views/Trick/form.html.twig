@@ -1,0 +1,150 @@
+{% extends "base.html.twig" %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block title %}Add Trick{% endblock %}
+
+{% block content %}
+    <div>
+        <ul class="text-danger text-left">
+            {% for error in form.vars.errors.form.getErrors(true) %}
+                <li>{{ error.message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <section class="nopadding col-lg-12 mx-auto text-center border border-dark">
+
+
+        {{ form_start(form) }}
+
+        <header class="masthead content" id="front_picture" style="background-image:
+                {% if trick.frontPicture is defined and trick.frontPicture is not null %}
+                    url('{{ asset('uploads/pictures/' ~ trick.frontPicture) }}');">
+                {% else %}
+                        url('/img/none.png');">
+                {% endif %}
+            <div class="fai">
+                <i class="fa fa-pencil cursor" data-toggle="modal"  data-backdrop="false" data-target="#frontPicture"></i>
+                <i class="fa fa-trash cursor" id="resetFrontPicture"></i>
+            </div>
+
+            <div class="fai2">
+                <i class="fa fa-camera cursor" title="add picture" id="add_picture"><i class="fa fa-plus fa-plus-position"></i></i>
+                <i class="fa fa-video-camera cursor" title="add video" id="add_video"><i class="fa fa-plus fa-plus-position2"></i></i>
+            </div>
+
+            <div class="intro-text">
+
+                <div class="intro-heading text-uppercase col-lg-4 mx-auto">
+                    {{ form_widget(form.name) }}
+                </div>
+
+            </div>
+        </header>
+
+            <div class="album py-5 bg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-2" id="addPicture">
+                            <div class="card mb-4 box-shadow">
+                                <img class="card-img-top" src="{{ asset('img/none_small.jpg') }}" alt="none" height="150px">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group mx-auto">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary addPicture"><i class="fa fa-pencil"></i></button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary deletePicture"><i class="fa fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if trick.pictures is defined %}
+                            {% for picture in trick.pictures %}
+                            <div class="col-md-2" id="addPicture{{ loop.index0 }}">
+                                <div class="card mb-4 box-shadow">
+                                    <img class="card-img-top" src="{{ asset('uploads/pictures/' ~ picture.file) }}" alt="none" height="150px">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="btn-group mx-auto">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary addPicture"><i class="fa fa-pencil"></i></button>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary deletePicture"><i class="fa fa-trash"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+        <div class="album bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4" id="addVideo">
+                        <div class="card mb-4 box-shadow">
+                            <iframe src="https://www.youtube.com/embed/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group mx-auto">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary addVideo" data-toggle="modal" data-backdrop="false" data-target="#modalVideo" id="#dataVideo"><i class="fa fa-pencil"></i></button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary deleteVideo"><i class="fa fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if trick.videos is defined %}
+                        {% for video in trick.videos %}
+                        <div class="col-md-4" id="addVideo{{ loop.index0 }}">
+                            <div class="card mb-4 box-shadow">
+                                <iframe src="{{ video.url }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group mx-auto">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary addVideo" data-toggle="modal" data-backdrop="false" data-target="#modalVideo" id="#dataVideo"><i class="fa fa-pencil"></i></button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary deleteVideo"><i class="fa fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8 mx-auto">
+            {{ form_widget(form.description) }}
+        </div>
+
+        <div class="col-lg-2 offset-lg-2 mt-5 mb-5">
+            {{ form_widget(form.category) }}
+        </div>
+
+
+        {% include('@SnowTricksApp/Trick/modals/form.html.twig') %}
+        {% include('@SnowTricksApp/Trick/modals/delete_trick.html.twig') %}
+
+        {{ form_widget(form.pictures) }}
+        {{ form_widget(form.videos) }}
+
+        <div class="row offset-7">
+            {% if trick is defined %}
+            <div class="form-group">
+                <a href="#" data-href="{{ path('snow_tricks_trick_delete', {id: trick.id, csrf: csrf_token('delete-item')}) }}" data-toggle="modal" data-target="#confirm-delete"><button type="button" class="btn btn-danger mr-3">Delete</button></a>
+            </div>
+            {% endif %}
+            {{ form_end(form) }}
+        </div>
+
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+        {{ parent() }}
+    <script src="{{ asset('js/js.js') }}"></script>
+{% endblock %}

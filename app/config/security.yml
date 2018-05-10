@@ -2,7 +2,7 @@
 # https://symfony.com/doc/current/security.html
 security:
     encoders:
-        SnowTricks\UserBundle\Entity\User: sha512
+        SnowTricks\AppBundle\Entity\User: sha512
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
@@ -12,7 +12,7 @@ security:
     providers:
         main:
             entity:
-                class:    SnowTricks\UserBundle\Entity\User
+                class:    SnowTricks\AppBundle\Entity\User
                 property: username
 
     access_control:
