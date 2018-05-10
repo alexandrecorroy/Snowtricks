@@ -2,6 +2,7 @@
 
 namespace SnowTricks\UserBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SnowTricks\UserBundle\Entity\User;
 use SnowTricks\UserBundle\Form\ForgotPasswordType;
 use SnowTricks\UserBundle\Form\RegistrationType;
@@ -11,6 +12,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SecurityController extends Controller
 {
+    /**
+     * @Route("/login", name="login")
+     */
     public function loginAction(Request $request)
     {
         // Si le visiteur est déjà identifié, on le redirige vers l'accueil
@@ -29,6 +33,9 @@ class SecurityController extends Controller
         ));
     }
 
+    /**
+     * @Route("/registration", name="snow_tricks_user_registration")
+     */
     public function registerAction(Request $request)
     {
         $user = new User();
@@ -66,7 +73,6 @@ class SecurityController extends Controller
 
     }
 
-    // Encodage password
     public function encodePassword(User $user, $password)
     {
 
@@ -96,6 +102,9 @@ class SecurityController extends Controller
         $this->get('mailer')->send($message);
     }
 
+    /**
+     * @Route("/token/{token}", name="snow_tricks_user_tokenVerification")
+     */
     public function tokenVerificationAction($token)
     {
         $request = new Request();
@@ -127,6 +136,9 @@ class SecurityController extends Controller
         return $this->redirectToRoute('snow_tricks_homepage');
     }
 
+    /**
+     * @Route("/forgot_password", name="snow_tricks_user_forgotPassword")
+     */
     public function forgotPasswordAction(Request $request)
     {
 
@@ -168,6 +180,9 @@ class SecurityController extends Controller
 
     }
 
+    /**
+     * @Route("/reset_password/{token}", name="snow_tricks_user_resetPassword")
+     */
     public function resetPasswordAction(Request $request)
     {
 

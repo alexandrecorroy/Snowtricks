@@ -3,6 +3,8 @@
 namespace SnowTricks\TrickBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * Picture
@@ -23,7 +25,6 @@ class Picture
 
     /**
      * @var string
-     *
      * @ORM\Column(name="file", type="string", length=255)
      */
     private $file;

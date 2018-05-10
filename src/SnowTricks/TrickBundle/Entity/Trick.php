@@ -4,6 +4,8 @@ namespace SnowTricks\TrickBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * Trick
@@ -24,7 +26,15 @@ class Trick
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank(
+     *     message= "Name cannot be empty."
+     * )
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 64,
+     *      minMessage = "Name of trick must be at least {{ limit }} characters long",
+     *      maxMessage = "Name of trick cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(name="name", type="string", length=64, unique=true)
      */
     private $name;
@@ -38,7 +48,15 @@ class Trick
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank(
+     *     message= "Description cannot be empty."
+     * )
+     * @Assert\Length(
+     *      min = 128,
+     *      max = 2048,
+     *      minMessage = "Description must be at least {{ limit }} characters long",
+     *      maxMessage = "Name of trick cannot be longer than {{ limit }} characters"
+     * )
      * @ORM\Column(name="description", type="string", length=2048)
      */
     private $description;

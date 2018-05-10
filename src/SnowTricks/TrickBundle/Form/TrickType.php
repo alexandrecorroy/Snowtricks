@@ -65,7 +65,8 @@ class TrickType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'SnowTricks\TrickBundle\Entity\Trick'
+            'data_class' => 'SnowTricks\TrickBundle\Entity\Trick',
+            'attr'=>array('novalidate'=>'novalidate')
         ));
     }
 

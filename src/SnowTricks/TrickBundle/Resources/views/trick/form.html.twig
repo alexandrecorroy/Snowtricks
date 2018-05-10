@@ -4,6 +4,13 @@
 {% block title %}Add Trick{% endblock %}
 
 {% block content %}
+    <div>
+        <ul class="text-danger text-left">
+            {% for error in form.vars.errors.form.getErrors(true) %}
+                <li>{{ error.message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
     <section class="nopadding col-lg-12 mx-auto text-center border border-dark">
 
 
@@ -28,8 +35,6 @@
             <div class="intro-text">
 
                 <div class="intro-heading text-uppercase col-lg-4 mx-auto">
-
-                    {{ form_label(form.name) }}
                     {{ form_widget(form.name) }}
                 </div>
 
@@ -112,12 +117,10 @@
         </div>
 
         <div class="col-lg-8 mx-auto">
-            {{ form_label(form.description) }}
             {{ form_widget(form.description) }}
         </div>
 
         <div class="col-lg-2 offset-lg-2 mt-5 mb-5">
-            {{ form_label(form.category) }}
             {{ form_widget(form.category) }}
         </div>
 
@@ -125,9 +128,7 @@
         {% include('@SnowTricksTrick/modals/form.html.twig') %}
         {% include('@SnowTricksTrick/modals/delete_trick.html.twig') %}
 
-        {{ form_label(form.pictures) }}
         {{ form_widget(form.pictures) }}
-        {{ form_label(form.videos) }}
         {{ form_widget(form.videos) }}
 
         <div class="row offset-7">
@@ -138,7 +139,6 @@
             {% endif %}
             {{ form_end(form) }}
         </div>
-
 
     </section>
 

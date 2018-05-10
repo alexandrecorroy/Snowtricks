@@ -2,12 +2,16 @@
 
 namespace SnowTricks\UserBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SnowTricks\UserBundle\Form\DashboardType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class UserController extends Controller
 {
+    /**
+     * @Route("/dashboard", name="snow_tricks_user_dashboard")
+     */
     public function dashboardAction(Request $request)
     {
         $user = $this->getUser();
@@ -52,6 +56,9 @@ class UserController extends Controller
         ));
     }
 
+    /**
+     * @Route("/dashboard/user/{id}/deletePicture", requirements={"id" = "\d+"}, name="snow_tricks_user_dashboard_deletePicture")
+     */
     public function deleteUserPictureAction($id)
     {
         $em = $this->getDoctrine()->getManager();

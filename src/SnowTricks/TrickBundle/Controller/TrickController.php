@@ -9,6 +9,7 @@
 namespace SnowTricks\TrickBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SnowTricks\CommentBundle\Controller\CommentController;
 use SnowTricks\TrickBundle\Entity\Trick;
 use SnowTricks\TrickBundle\Form\TrickType;
@@ -20,6 +21,9 @@ use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 
 class TrickController extends Controller
 {
+    /**
+     * @Route("/trick/add", name="snow_tricks_trick_add")
+     */
     public function addAction(Request $request)
     {
         $trick = new Trick();
@@ -66,9 +70,13 @@ class TrickController extends Controller
 
         return $this->render('@SnowTricksTrick/trick/form.html.twig', array(
             'form' => $form->createView(),
+            'errors' => $form->getErrors()
         ));
     }
 
+    /**
+     * @Route("/trick/edit/{id}", requirements={"id" = "\d+"}, name="snow_tricks_trick_edit")
+     */
     public function editAction($id, Request $request)
     {
 
@@ -195,6 +203,9 @@ class TrickController extends Controller
         unlink($this->container->getParameter('pictures_directory').'/'.$fileName);
     }
 
+    /**
+     * @Route("/trick/delete/{id}/{csrf}", requirements={"id" = "\d+"}, name="snow_tricks_trick_delete")
+     */
     public function deleteAction($id, $csrf)
     {
 
@@ -235,6 +246,9 @@ class TrickController extends Controller
 
     }
 
+    /**
+     * @Route("/trick/{slug}", name="snow_tricks_trick_view")
+     */
     public function viewAction($slug)
     {
         $em = $this->getDoctrine()->getManager();
@@ -263,6 +277,9 @@ class TrickController extends Controller
         ));
     }
 
+    /**
+     * @Route("/trick/ajax/{id}", name="snow_tricks_list_tricks_ajax")
+     */
     public function listTricksAjaxAction($id)
     {
         $em = $this->getDoctrine()->getManager();
