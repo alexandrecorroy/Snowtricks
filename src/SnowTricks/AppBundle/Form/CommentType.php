@@ -34,7 +34,8 @@ class CommentType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'SnowTricks\AppBundle\Entity\Comment'
+            'data_class' => 'SnowTricks\AppBundle\Entity\Comment',
+            'attr'=>array('novalidate'=>'novalidate')
         ));
     }
 

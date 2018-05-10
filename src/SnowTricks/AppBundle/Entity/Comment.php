@@ -3,6 +3,7 @@
 namespace SnowTricks\AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Comment
@@ -23,7 +24,9 @@ class Comment
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank(
+     *     message= "Your comment cannot be empty."
+     * )
      * @ORM\Column(name="message", type="string", length=255)
      */
     private $message;

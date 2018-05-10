@@ -78,7 +78,6 @@ class TrickController extends Controller
      */
     public function editAction(Trick $trick, Request $request)
     {
-
         $originalPictures = new ArrayCollection();
         $originalVideos = new ArrayCollection();
         $originalFrontPictureName = $trick->getFrontPicture();
@@ -106,17 +105,10 @@ class TrickController extends Controller
             $files = $trick->getPictures();
             $videos = $trick->getVideos();
 
-            // remove the relationship between the videos and the Trick
-            foreach ($originalVideos as $video) {
-                if (false === $videos->contains($video)) {
-                    $em->remove($video);
-                }
-            }
 
-            //remove the relationship between the picture and the Trick
+            //remove delete pictures
             foreach ($originalPictures as $picture) {
                 if (false === $files->contains($picture)) {
-                    $em->remove($picture);
                     $this->removeFile($picture->getFileName());
                 }
             }

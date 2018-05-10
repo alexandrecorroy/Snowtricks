@@ -4,6 +4,7 @@ namespace SnowTricks\AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -12,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="trick")
  * @ORM\Entity(repositoryClass="SnowTricks\AppBundle\Repository\TrickRepository")
+ * @UniqueEntity("name", message="Name of trick is already used !")
  */
 class Trick
 {
@@ -92,13 +94,13 @@ class Trick
     private $frontPictureName;
 
     /**
-     * @ORM\OneToMany(targetEntity="SnowTricks\AppBundle\Entity\Picture", mappedBy="trick", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="SnowTricks\AppBundle\Entity\Picture", mappedBy="trick", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\JoinColumn(nullable=false)
      */
     private $pictures;
 
     /**
-     * @ORM\OneToMany(targetEntity="SnowTricks\AppBundle\Entity\Video", mappedBy="trick", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="SnowTricks\AppBundle\Entity\Video", mappedBy="trick", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\JoinColumn(nullable=true)
      */
     private $videos;
