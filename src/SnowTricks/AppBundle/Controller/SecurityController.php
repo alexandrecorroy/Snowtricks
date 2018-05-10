@@ -7,11 +7,13 @@ use SnowTricks\AppBundle\Entity\User;
 use SnowTricks\AppBundle\Form\ForgotPasswordType;
 use SnowTricks\AppBundle\Form\RegistrationType;
 use SnowTricks\AppBundle\Form\ResetPasswordType;
+use SnowTricks\AppBundle\Service\Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class SecurityController extends Controller
 {
+
     /**
      * @Route("/login", name="login")
      */
@@ -36,7 +38,7 @@ class SecurityController extends Controller
     /**
      * @Route("/registration", name="snow_tricks_user_registration")
      */
-    public function registerAction(Request $request)
+    public function registerAction(Request $request, Mailer $mailer)
     {
         $user = new User();
 
@@ -55,7 +57,7 @@ class SecurityController extends Controller
             $em->flush();
 
 
-            $this->sendMail($user, 'Confirmer votre compte', 'registration');
+            $mailer->sendMail($user, 'Confirm account', 'registration');
 
             $this->addFlash(
                 'notice',
@@ -84,20 +86,6 @@ class SecurityController extends Controller
     {
         $data = $user->getEmail().uniqid().microtime();
         return hash('sha512', $data);
-    }
-
-    public function sendMail(User $user, $subject, $template)
-    {
-        $message = \Swift_Message::newInstance()
-            ->setSubject($subject)
-            ->setFrom('contact@snowtricks.com')
-            ->setTo($user->getEmail())
-            ->setBody($this->renderView(
-                '@SnowTricksApp/User/Emails/'.$template.'.html.twig',
-                array('username' => $user->getUsername(), 'token' => $user->getToken())),
-                'text/html')
-        ;
-        $this->get('mailer')->send($message);
     }
 
     /**
@@ -137,7 +125,7 @@ class SecurityController extends Controller
     /**
      * @Route("/forgot_password", name="snow_tricks_user_forgotPassword")
      */
-    public function forgotPasswordAction(Request $request)
+    public function forgotPasswordAction(Request $request, Mailer $mailer)
     {
 
         $form = $this->createForm(ForgotPasswordType::class);
@@ -161,10 +149,13 @@ class SecurityController extends Controller
                 $em->persist($user);
                 $em->flush();
 
-                $this->sendMail($user, 'Reset your password', 'forgot_password');
+                $mailer->sendMail($user, 'Reset your password', 'forgot_password');
             }
 
-            $request->getSession()->getFlashBag()->add('notice', 'An email send to you for reset password !');
+            $this->addFlash(
+                'notice',
+                'An email send to you for reset password !'
+            );
 
             return $this->redirectToRoute('snow_tricks_user_forgotPassword');
         }

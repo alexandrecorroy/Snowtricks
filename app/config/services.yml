@@ -19,12 +19,34 @@ services:
         class: SnowTricks\AppBundle\Service\FileUploader
         arguments: ['%pictures_directory%']
 
+    trick.mailer:
+        class: SnowTricks\AppBundle\Service\Mailer
+        arguments:
+            - "@twig"
+            - "@mailer"
+
+    SnowTricks\AppBundle\Service\Mailer:
+        arguments:
+            $mailerFrom: '%mailer_from%'
+
     trick.doctrine_image_listener:
             class: SnowTricks\AppBundle\EventListener\PictureUploadListener
             arguments: ['@trick.image_uploader']
             tags:
                 - { name: doctrine.event_listener, event: prePersist }
                 - { name: doctrine.event_listener, event: preUpdate }
+
+
+    SnowTricks\AppBundle\:
+        resource: '../../src/SnowTricks/AppBundle/*'
+        exclude: '../../src/SnowTricks/AppBundle/{Entity,Repository,Tests}'
+
+        # controllers are imported separately to make sure they're public
+        # and have a tag that allows actions to type-hint services
+    Snowtricks\AppBundle\Controller\:
+        resource: '../../src/SnowTricks/AppBundle/Controller'
+        public: true
+        tags: ['controller.service_arguments']
 
     # makes classes in src/AppBundle available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
