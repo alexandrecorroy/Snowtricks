@@ -21,11 +21,6 @@ class CommentController extends Controller
      */
     public function addAction(Trick $trick, Request $request)
     {
-
-        if (null === $trick) {
-            throw new NotFoundHttpException("No trick found.");
-        }
-
         $comment = new Comment();
 
         $form = $this->createForm(CommentType::class, $comment, array(

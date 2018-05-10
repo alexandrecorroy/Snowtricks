@@ -2,7 +2,9 @@
 
 namespace SnowTricks\AppBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use SnowTricks\AppBundle\Entity\User;
 use SnowTricks\AppBundle\Form\DashboardType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,11 +60,11 @@ class UserController extends Controller
 
     /**
      * @Route("/dashboard/user/{id}/deletePicture", requirements={"id" = "\d+"}, name="snow_tricks_user_dashboard_deletePicture")
+     * @ParamConverter("user", class="SnowTricksAppBundle:User")
      */
-    public function deleteUserPictureAction($id)
+    public function deleteUserPictureAction(User $user)
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('SnowTricksAppBundle:User')->find($id);
 
         unlink($this->container->getParameter('pictures_directory').'/'.$user->getPicture());
         $user->setPicture(null);

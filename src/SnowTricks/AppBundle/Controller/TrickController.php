@@ -9,6 +9,7 @@
 namespace SnowTricks\AppBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SnowTricks\AppBundle\Entity\Trick;
 use SnowTricks\AppBundle\Form\TrickType;
@@ -75,18 +76,10 @@ class TrickController extends Controller
 
     /**
      * @Route("/trick/edit/{id}", requirements={"id" = "\d+"}, name="snow_tricks_trick_edit")
+     * @ParamConverter("trick", class="SnowTricksAppBundle:Trick")
      */
-    public function editAction($id, Request $request)
+    public function editAction(Trick $trick, Request $request)
     {
-
-        $em = $this->getDoctrine()->getManager();
-
-        $trick = $em->getRepository('SnowTricksAppBundle:Trick')->find($id);
-
-        if (null === $trick) {
-            throw new NotFoundHttpException("No trick found.");
-        }
-
 
         $originalPictures = new ArrayCollection();
         $originalVideos = new ArrayCollection();
@@ -204,18 +197,12 @@ class TrickController extends Controller
 
     /**
      * @Route("/trick/delete/{id}/{csrf}", requirements={"id" = "\d+"}, name="snow_tricks_trick_delete")
+     * @ParamConverter("trick", class="SnowTricksAppBundle:Trick")
      */
-    public function deleteAction($id, $csrf)
+    public function deleteAction(Trick $trick, $csrf)
     {
 
         if ($this->isCsrfTokenValid('delete-item', $csrf)) {
-            $em = $this->getDoctrine()->getManager();
-
-            $trick = $em->getRepository('SnowTricksAppBundle:Trick')->find($id);
-
-            if (null === $trick) {
-                throw new NotFoundHttpException("No trick found.");
-            }
 
             // delete all picture from server
             foreach ($trick->getPictures() as $picture) {
@@ -228,7 +215,7 @@ class TrickController extends Controller
                 $this->removeFile($trick->getFrontPicture());
             }
 
-
+            $em = $this->getDoctrine()->getManager();
             $em->remove($trick);
             $em->flush();
 
@@ -247,16 +234,10 @@ class TrickController extends Controller
 
     /**
      * @Route("/trick/{slug}", name="snow_tricks_trick_view")
+     * @ParamConverter("trick", class="SnowTricksAppBundle:Trick")
      */
-    public function viewAction($slug)
+    public function viewAction(Trick $trick)
     {
-        $em = $this->getDoctrine()->getManager();
-        $trick = $em->getRepository('SnowTricksAppBundle:Trick')->findOneBy(array('slug' => $slug));
-
-        if (null === $trick) {
-            throw new NotFoundHttpException("No trick found.");
-        }
-
         return $this->render('@SnowTricksApp/Trick/view_trick.twig', array(
             'trick' => $trick
         ));
