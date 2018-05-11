@@ -10,6 +10,7 @@ namespace SnowTricks\AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use SnowTricks\AppBundle\Entity\Comment;
 use SnowTricks\AppBundle\Entity\Trick;
 use SnowTricks\AppBundle\Form\TrickType;
 use SnowTricks\AppBundle\Manager\TrickManager;
@@ -125,13 +126,14 @@ class TrickController extends Controller
     }
 
     /**
-     * @Route("/trick/{slug}", name="snow_tricks_trick_view")
+     * @Route("/trick/{id}/{slug}", name="snow_tricks_trick_view")
      * @ParamConverter("trick", class="SnowTricksAppBundle:Trick")
      */
     public function viewAction(Trick $trick)
     {
         return $this->render('@SnowTricksApp/Trick/view_trick.twig', array(
-            'trick' => $trick
+            'trick' => $trick,
+            'comments' => $trick->getComments()
         ));
     }
 

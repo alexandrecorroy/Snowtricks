@@ -105,11 +105,17 @@ class Trick
      */
     private $videos;
 
+    /**
+     * @ORM\OneToMany(targetEntity="SnowTricks\AppBundle\Entity\Comment", mappedBy="trick")
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->createDate = new \DateTime();
         $this->pictures = new ArrayCollection();
         $this->videos = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function addPicture(Picture $picture)
@@ -156,6 +162,11 @@ class Trick
     public function getCategory()
     {
         return $this->category;
+    }
+
+    public function getComments()
+    {
+        return $this->comments;
     }
 
     /**
