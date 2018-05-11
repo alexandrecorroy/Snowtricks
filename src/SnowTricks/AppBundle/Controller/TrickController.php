@@ -13,6 +13,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SnowTricks\AppBundle\Entity\Trick;
 use SnowTricks\AppBundle\Form\TrickType;
+use SnowTricks\AppBundle\Manager\AppManager;
+use SnowTricks\AppBundle\Manager\TrickManager;
+use SnowTricks\AppBundle\Service\Slugger;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,12 +24,25 @@ use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 
 class TrickController extends Controller
 {
+
+    private $tm;
+    private $am;
+    private $slugger;
+
+    public function __construct(TrickManager $tm, AppManager $am, Slugger $slugger)
+    {
+        $this->tm = $tm;
+        $this->am = $am;
+        $this->slugger = $slugger;
+    }
+
+
     /**
      * @Route("/trick/add", name="snow_tricks_trick_add")
      */
     public function addAction(Request $request)
     {
-        $trick = new Trick();
+        $trick = $this->tm->initTrick();
 
         $form = $this->createForm(TrickType::class, $trick);
 
@@ -34,29 +50,13 @@ class TrickController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $em = $this->getDoctrine()->getManager();
-            $files = $trick->getPictures();
-            $videos = $trick->getVideos();
-
-
-            foreach($files as $file)
-            {
-
-                $trick->addPicture($file);
-            }
-
-            foreach($videos as $video)
-            {
-
-                $trick->addVideo($video);
-            }
+            $this->tm->addPictures($trick->getPictures());
+            $this->tm->addVideos($trick->getVideos());
 
             // add slug
-            $trick->setSlug($trick->getName());
+            $trick->setSlug($this->slugger->slugify($trick->getName()));
 
-
-            $em->persist($trick);
-            $em->flush();
+            $this->am->flush($trick);
 
             $this->addFlash(
                 'notice',
@@ -109,7 +109,7 @@ class TrickController extends Controller
             //remove delete pictures
             foreach ($originalPictures as $picture) {
                 if (false === $files->contains($picture)) {
-                    $this->removeFile($picture->getFileName());
+                    $this->am->removeFile($picture->getFileName());
                 }
             }
 
@@ -125,7 +125,7 @@ class TrickController extends Controller
                 elseif ($file->getId() !== null && $file->getFile() !== null)
                 {
                     $trick->addPicture($file);
-                    $this->removeFile($file->getFileName());
+                    $this->am->removeFile($file->getFileName());
 
                 }
             }
@@ -139,7 +139,7 @@ class TrickController extends Controller
             {
                 if($trick->getFrontPictureName() !== null)
                 {
-                    $this->removeFile($trick->getFrontPictureName());
+                    $this->am->removeFile($trick->getFrontPictureName());
                 }
 
             }
@@ -177,11 +177,6 @@ class TrickController extends Controller
         ));
     }
 
-    public function removeFile($fileName)
-    {
-        unlink($this->container->getParameter('pictures_directory').'/'.$fileName);
-    }
-
     /**
      * @Route("/trick/delete/{id}/{csrf}", requirements={"id" = "\d+"}, name="snow_tricks_trick_delete")
      * @ParamConverter("trick", class="SnowTricksAppBundle:Trick")
@@ -193,13 +188,13 @@ class TrickController extends Controller
 
             // delete all picture from server
             foreach ($trick->getPictures() as $picture) {
-                $this->removeFile($picture->getFile());
+                $this->am->removeFile($picture->getFile());
             }
 
             // delete frontPicture from server
             if($trick->getFrontPicture() !== null)
             {
-                $this->removeFile($trick->getFrontPicture());
+                $this->am->removeFile($trick->getFrontPicture());
             }
 
             $em = $this->getDoctrine()->getManager();

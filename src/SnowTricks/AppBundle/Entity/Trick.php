@@ -44,7 +44,7 @@ class Trick
     /**
      * @var string
      *
-     * @ORM\Column(name="slug", type="string", length=64, nullable=true)
+     * @ORM\Column(name="slug", type="string", length=64, nullable=false, unique=true)
      */
     private $slug;
 
@@ -319,24 +319,6 @@ class Trick
      */
     public function setSlug($slug)
     {
-        // replace non letter or digits by -
-        $slug = preg_replace('~[^\pL\d]+~u', '-', $slug);
-
-        // transliterate
-        $slug = iconv('utf-8', 'us-ascii//TRANSLIT', $slug);
-
-        // remove unwanted characters
-        $slug = preg_replace('~[^-\w]+~', '', $slug);
-
-        // trim
-        $slug = trim($slug, '-');
-
-        // remove duplicated - symbols
-        $slug = preg_replace('~-+~', '-', $slug);
-
-        // lowercase
-        $slug = strtolower($slug);
-
         $this->slug = $slug;
     }
 

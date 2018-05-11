@@ -22,35 +22,32 @@ class UserController extends Controller
 
         $form = $this->createForm(DashboardType::class, $user);
 
-        if ($request->isMethod('POST')) {
+        $form->handleRequest($request);
 
-            $form->handleRequest($request);
-
-            if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
 
-                if($user->getPicture() != null && $savePictureUser != null)
-                {
-                    $file = $this->container->getParameter('pictures_directory').'/'.$savePictureUser;
+            if($user->getPicture() != null && $savePictureUser != null)
+            {
+                $file = $this->container->getParameter('pictures_directory').'/'.$savePictureUser;
 
-                    unlink($file);
-                }
-                elseif($savePictureUser != null)
-                {
-                    $user->setPicture($savePictureUser);
-                }
-
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
-
-                $this->addFlash(
-                    'notice',
-                    'Your account has been updated !'
-                );
-
-                return $this->redirectToRoute('snow_tricks_user_dashboard');
+                unlink($file);
             }
+            elseif($savePictureUser != null)
+            {
+                $user->setPicture($savePictureUser);
+            }
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            $this->addFlash(
+                'notice',
+                'Your account has been updated !'
+            );
+
+            return $this->redirectToRoute('snow_tricks_user_dashboard');
         }
 
         return $this->render('@SnowTricksApp/User/dashboard.twig', array(
