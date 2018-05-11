@@ -37,7 +37,7 @@
     <script type="text/javascript">
         var tricksLength = 15;
         var stop = 1;
-        var url = "{{ path('snow_tricks_list_tricks_ajax', {'id': 'null'})|escape('js') }}";
+        var url = "{{ path('snow_tricks_list_tricks_ajax', {'last_trick_id': 'null'})|escape('js') }}";
         url = url.replace('null', '');
 
         if($(".portfolio-item").length < tricksLength)

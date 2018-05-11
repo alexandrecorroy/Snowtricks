@@ -15,17 +15,6 @@ services:
         # if you need to do this, you can override this setting on individual services
         public: false
 
-    trick.image_uploader:
-        class: SnowTricks\AppBundle\Service\FileUploader
-        arguments: ['%pictures_directory%']
-
-    trick.doctrine_image_listener:
-            class: SnowTricks\AppBundle\EventListener\PictureUploadListener
-            arguments: ['@trick.image_uploader']
-            tags:
-                - { name: doctrine.event_listener, event: prePersist }
-                - { name: doctrine.event_listener, event: preUpdate }
-
     SnowTricks\AppBundle\:
         resource: '../../src/SnowTricks/AppBundle/*'
         exclude: '../../src/SnowTricks/AppBundle/{Repository,Tests}'
@@ -34,3 +23,18 @@ services:
         resource: '../../src/SnowTricks/AppBundle/Controller'
         public: true
         tags: ['controller.service_arguments']
+
+    trick.image_uploader:
+        class: SnowTricks\AppBundle\Service\FileUploader
+        arguments: ['%pictures_directory%']
+
+    SnowTricks\AppBundle\Service\Mailer:
+        arguments:
+            $mailerFrom: '%mailer_from%'
+
+    trick.doctrine_image_listener:
+            class: SnowTricks\AppBundle\EventListener\PictureUploadListener
+            arguments: ['@trick.image_uploader']
+            tags:
+                - { name: doctrine.event_listener, event: prePersist }
+                - { name: doctrine.event_listener, event: preUpdate }

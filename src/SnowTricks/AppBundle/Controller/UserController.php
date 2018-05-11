@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SnowTricks\AppBundle\Entity\User;
 use SnowTricks\AppBundle\Form\DashboardType;
+use SnowTricks\AppBundle\Service\RemoveFile;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -14,7 +15,7 @@ class UserController extends Controller
     /**
      * @Route("/dashboard", name="snow_tricks_user_dashboard")
      */
-    public function dashboardAction(Request $request)
+    public function dashboardAction(Request $request, RemoveFile $removeFile)
     {
         $user = $this->getUser();
 
@@ -29,9 +30,7 @@ class UserController extends Controller
 
             if($user->getPicture() != null && $savePictureUser != null)
             {
-                $file = $this->container->getParameter('pictures_directory').'/'.$savePictureUser;
-
-                unlink($file);
+                $removeFile->remove($savePictureUser);
             }
             elseif($savePictureUser != null)
             {
@@ -59,11 +58,11 @@ class UserController extends Controller
      * @Route("/dashboard/user/{id}/deletePicture", requirements={"id" = "\d+"}, name="snow_tricks_user_dashboard_deletePicture")
      * @ParamConverter("user", class="SnowTricksAppBundle:User")
      */
-    public function deleteUserPictureAction(User $user)
+    public function deleteUserPictureAction(User $user, RemoveFile $removeFile)
     {
         $em = $this->getDoctrine()->getManager();
 
-        unlink($this->container->getParameter('pictures_directory').'/'.$user->getPicture());
+        $removeFile->remove($user->getPicture());
         $user->setPicture(null);
 
         $em->persist($user);

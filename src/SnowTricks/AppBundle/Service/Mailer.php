@@ -16,18 +16,20 @@ class Mailer
 
     private $twig;
     private $mailer;
+    private $mailerFrom;
 
-    public function __construct(\Twig_Environment $twig, \Swift_Mailer $mailer)
+    public function __construct(\Twig_Environment $twig, \Swift_Mailer $mailer, $mailerFrom)
     {
         $this->twig = $twig;
         $this->mailer = $mailer;
+        $this->mailerFrom = $mailerFrom;
     }
 
     public function sendMail(User $user, $subject, $template)
     {
         $message = \Swift_Message::newInstance()
             ->setSubject($subject)
-            ->setFrom('contact@snowtricks.com')
+            ->setFrom($this->getMailerFrom())
             ->setTo($user->getEmail())
             ->setBody($this->twig->render(
                 '@SnowTricksApp/User/Emails/'.$template.'.html.twig', array(
@@ -36,6 +38,11 @@ class Mailer
                 'text/html'
             );
         $this->mailer->send($message);
+    }
+
+    public function getMailerFrom()
+    {
+        return $this->mailerFrom;
     }
 
 }

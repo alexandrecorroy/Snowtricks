@@ -209,10 +209,7 @@ $(document).ready(function() {
     });
 
     // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
-    if ($index === 0) {
-        addVideo($container2);
-        cloneVideo();
-    } else {
+    if ($index !== 0) {
         // S'il existe déjà des catégories, on ajoute un lien de suppression pour chacune d'entre elles
         $container2.children('div').each(function() {
             addDeleteLink($(this));
