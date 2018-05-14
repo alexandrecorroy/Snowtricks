@@ -1,6 +1,6 @@
 <?php
 
-namespace SnowTricks\AppBundle\Form;
+namespace SnowTricks\AppBundle\FormType;
 
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

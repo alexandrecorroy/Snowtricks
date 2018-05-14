@@ -12,7 +12,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SnowTricks\AppBundle\Entity\Comment;
 use SnowTricks\AppBundle\Entity\Trick;
-use SnowTricks\AppBundle\Form\TrickType;
+use SnowTricks\AppBundle\FormType\CommentType;
+use SnowTricks\AppBundle\FormType\TrickType;
+use SnowTricks\AppBundle\Manager\CommentManager;
 use SnowTricks\AppBundle\Manager\TrickManager;
 use SnowTricks\AppBundle\Service\Slugger;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -129,11 +131,36 @@ class TrickController extends Controller
      * @Route("/trick/{id}/{slug}", name="snow_tricks_trick_view")
      * @ParamConverter("trick", class="SnowTricksAppBundle:Trick")
      */
-    public function viewAction(Trick $trick)
+    public function viewAction(Trick $trick, CommentManager $commentManager, Request $request)
     {
+
+        $comment = $commentManager->initComment();
+
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $comment->setUser($this->getUser());
+            $comment->setTrick($trick);
+            $commentManager->saveComment($comment);
+
+            $this->addFlash(
+                'notice',
+                'Trick Added !'
+            );
+
+            return $this->redirectToRoute('snow_tricks_trick_view', array(
+                'id' => $trick->getId(),
+                'slug' => $trick->getSlug()
+            ));
+
+        }
+
         return $this->render('@SnowTricksApp/Trick/view_trick.twig', array(
             'trick' => $trick,
-            'comments' => $trick->getComments()
+            'comments' => $commentManager->getFirstComments($trick),
+            'form' => $form->createView()
         ));
     }
 

@@ -6,7 +6,7 @@
  * Time: 12:56
  */
 
-namespace SnowTricks\AppBundle\Form;
+namespace SnowTricks\AppBundle\FormType;
 
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\AbstractType;

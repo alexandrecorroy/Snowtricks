@@ -74,18 +74,12 @@
 
         {% if app.user %}
         {#Form comment#}
-        {{ render(controller(
-            'SnowTricksAppBundle:Comment:add',
-            { 'id': trick.id }
-        )) }}
+        {{ include("@SnowTricksApp/Comment/form.html.twig") }}
         {% endif %}
 
         {#List comments#}
 
-        {{ render(controller(
-            'SnowTricksAppBundle:Comment:listCommentsByTrick',
-            { 'id': trick.id }
-        )) }}
+        {{ include("@SnowTricksApp/Comment/comments.html.twig") }}
 
     </section>
 

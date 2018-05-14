@@ -5,7 +5,7 @@ namespace SnowTricks\AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SnowTricks\AppBundle\Entity\User;
-use SnowTricks\AppBundle\Form\DashboardType;
+use SnowTricks\AppBundle\FormType\DashboardType;
 use SnowTricks\AppBundle\Service\RemoveFile;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,11 +28,11 @@ class UserController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
 
-            if($user->getPicture() != null && $savePictureUser != null)
+            if($user->getPicture() !== null && $savePictureUser !== null)
             {
                 $removeFile->remove($savePictureUser);
             }
-            elseif($savePictureUser != null)
+            elseif($savePictureUser !== null)
             {
                 $user->setPicture($savePictureUser);
             }

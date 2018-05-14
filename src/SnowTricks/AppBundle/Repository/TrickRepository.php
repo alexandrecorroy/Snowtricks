@@ -11,12 +11,14 @@ namespace SnowTricks\AppBundle\Repository;
 class TrickRepository extends \Doctrine\ORM\EntityRepository
 {
 
+    const MAX_TRICKS = 15;
+
     public function listTricks()
     {
         return $this->createQueryBuilder('trick')
             ->select('trick')
             ->orderBy('trick.id', 'DESC')
-            ->setMaxResults(15)
+            ->setMaxResults($this::MAX_TRICKS)
             ->getQuery()
             ->getResult();
     }
@@ -28,7 +30,7 @@ class TrickRepository extends \Doctrine\ORM\EntityRepository
             ->select('trick')
             ->orderBy('trick.id', 'DESC')
             ->andWhere('trick.id < :lastTrick')
-            ->setMaxResults(15)
+            ->setMaxResults($this::MAX_TRICKS)
             ->setParameter('lastTrick', $id)
             ->getQuery()
             ->getResult();

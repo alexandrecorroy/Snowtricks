@@ -4,9 +4,9 @@ namespace SnowTricks\AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SnowTricks\AppBundle\Entity\User;
-use SnowTricks\AppBundle\Form\ForgotPasswordType;
-use SnowTricks\AppBundle\Form\RegistrationType;
-use SnowTricks\AppBundle\Form\ResetPasswordType;
+use SnowTricks\AppBundle\FormType\ForgotPasswordType;
+use SnowTricks\AppBundle\FormType\RegistrationType;
+use SnowTricks\AppBundle\FormType\ResetPasswordType;
 use SnowTricks\AppBundle\Service\Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -93,7 +93,6 @@ class SecurityController extends Controller
      */
     public function tokenVerificationAction($token)
     {
-        $request = new Request();
         $repository = $this->getDoctrine()->getRepository(User::class);
         $user = $repository->findOneBy(['token' => $token]);
 

@@ -11,13 +11,15 @@ namespace SnowTricks\AppBundle\Repository;
 class CommentRepository extends \Doctrine\ORM\EntityRepository
 {
 
+    const MAX_COMMENTS = 10;
+
     public function findCommentsByTrick($id)
     {
         return $this->createQueryBuilder('comment')
             ->select('comment')
             ->orderBy('comment.id', 'DESC')
             ->andWhere('comment.trick = :id')
-            ->setMaxResults(10)
+            ->setMaxResults($this::MAX_COMMENTS)
             ->setParameter('id', $id)
             ->getQuery()
             ->getResult();
@@ -30,7 +32,7 @@ class CommentRepository extends \Doctrine\ORM\EntityRepository
             ->orderBy('comment.id', 'DESC')
             ->andWhere('comment.id < :lastComment')
             ->andWhere('comment.trick = :id')
-            ->setMaxResults(10)
+            ->setMaxResults($this::MAX_COMMENTS)
             ->setParameter('lastComment', $lastComment)
             ->setParameter('id', $id)
             ->getQuery()

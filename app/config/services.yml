@@ -19,7 +19,7 @@ services:
         resource: '../../src/SnowTricks/AppBundle/*'
         exclude: '../../src/SnowTricks/AppBundle/{Repository,Tests}'
 
-    Snowtricks\AppBundle\Controller\:
+    SnowTricks\AppBundle\Controller\:
         resource: '../../src/SnowTricks/AppBundle/Controller'
         public: true
         tags: ['controller.service_arguments']

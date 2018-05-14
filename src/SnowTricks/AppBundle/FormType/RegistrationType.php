@@ -6,7 +6,7 @@
  * Time: 11:05
  */
 
-namespace SnowTricks\AppBundle\Form;
+namespace SnowTricks\AppBundle\FormType;
 
 use SnowTricks\AppBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
