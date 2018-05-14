@@ -33,6 +33,4 @@ class CategoryType extends AbstractType
     {
         return 'snowtricks_appbundle_category';
     }
-
-
 }

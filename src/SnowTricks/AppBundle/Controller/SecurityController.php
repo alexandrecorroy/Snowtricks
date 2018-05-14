@@ -47,7 +47,6 @@ class SecurityController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $user->setToken($this::generateToken($user));
 
             $user->setPassword($this->encodePassword($user, $user->getPassword()));
@@ -70,12 +69,10 @@ class SecurityController extends Controller
         return $this->render('@SnowTricksApp/User/Security/registration.html.twig', array(
             'form' => $form->createView(),
         ));
-
     }
 
     public function encodePassword(User $user, $password)
     {
-
         $factory = $this->get('security.encoder_factory');
 
         $encoder = $factory->getEncoder($user);
@@ -96,8 +93,7 @@ class SecurityController extends Controller
         $repository = $this->getDoctrine()->getRepository(User::class);
         $user = $repository->findOneBy(['token' => $token]);
 
-        if(!$user->isEnabled())
-        {
+        if (!$user->isEnabled()) {
             $user->setIsActive(true);
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
@@ -107,15 +103,11 @@ class SecurityController extends Controller
                 'notice',
                 'Your account is active !'
             );
-
-        }
-        else
-        {
+        } else {
             $this->addFlash(
                 'notice',
                 'Account already active !'
             );
-
         }
 
         return $this->redirectToRoute('snow_tricks_homepage');
@@ -126,22 +118,18 @@ class SecurityController extends Controller
      */
     public function forgotPasswordAction(Request $request, Mailer $mailer)
     {
-
         $form = $this->createForm(ForgotPasswordType::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $repository = $this->getDoctrine()->getRepository(User::class);
 
             $user = $repository->findOneBy(
                 array('username' => $request->get('username'))
             );
 
-            if($user)
-            {
-
+            if ($user) {
                 $user->setToken($this::generateToken($user));
 
                 $em = $this->getDoctrine()->getManager();
@@ -162,8 +150,6 @@ class SecurityController extends Controller
         return $this->render('@SnowTricksApp/User/Security/forgot_password.html.twig', array(
             'form' => $form->createView(),
         ));
-
-
     }
 
     /**
@@ -181,8 +167,7 @@ class SecurityController extends Controller
         );
 
         // si aucun token correspondant
-        if(!$userToken)
-        {
+        if (!$userToken) {
             // renvoi sur home avec message
             $this->addFlash(
                 'notice',
@@ -207,8 +192,7 @@ class SecurityController extends Controller
             );
 
             // compare si userToken et user === username
-            if($user->getUsername()===$userToken->getUsername())
-            {
+            if ($user->getUsername()===$userToken->getUsername()) {
 
                 // on modifie le mot de passe de user
                 $user->setPassword($this->encodePassword($user, $request->get('password')));
@@ -216,7 +200,6 @@ class SecurityController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($user);
                 $em->flush();
-
             }
 
             // renvoi sur home avec message
@@ -230,7 +213,5 @@ class SecurityController extends Controller
         return $this->render('@SnowTricksApp/User/Security/reset_password.html.twig', array(
             'form' => $form->createView(),
         ));
-
-
     }
 }

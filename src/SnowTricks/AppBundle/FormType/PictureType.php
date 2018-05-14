@@ -41,6 +41,4 @@ class PictureType extends AbstractType
     {
         return 'snowtricks_appbundle_picture';
     }
-
-
 }

@@ -15,5 +15,4 @@ class AppController extends Controller
     {
         return $this->render('@SnowTricksApp/App/index.html.twig');
     }
-
 }

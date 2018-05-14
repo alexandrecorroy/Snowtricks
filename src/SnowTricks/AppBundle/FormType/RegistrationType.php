@@ -16,10 +16,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
-
 class RegistrationType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -36,5 +34,4 @@ class RegistrationType extends AbstractType
             'data_class' => User::class,
         ));
     }
-
 }

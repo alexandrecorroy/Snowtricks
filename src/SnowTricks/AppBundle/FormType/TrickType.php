@@ -2,7 +2,6 @@
 
 namespace SnowTricks\AppBundle\FormType;
 
-
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -77,6 +76,4 @@ class TrickType extends AbstractType
     {
         return 'snowtricks_appbundle_trick';
     }
-
-
 }

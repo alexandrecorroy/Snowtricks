@@ -8,7 +8,6 @@
 
 namespace SnowTricks\AppBundle\Manager;
 
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use SnowTricks\AppBundle\Entity\Trick;
@@ -16,7 +15,6 @@ use SnowTricks\AppBundle\Service\RemoveFile;
 
 class TrickManager
 {
-
     private $trick;
     private $em;
     private $removeFile;
@@ -35,19 +33,14 @@ class TrickManager
 
     public function addPictures($pictures)
     {
-        foreach($pictures as $picture)
-        {
-
+        foreach ($pictures as $picture) {
             $this->trick->addPicture($picture);
         }
-
     }
 
     public function addVideos($videos)
     {
-        foreach($videos as $video)
-        {
-
+        foreach ($videos as $video) {
             $this->trick->addVideo($video);
         }
     }
@@ -60,10 +53,8 @@ class TrickManager
 
     public function saveOldTrick(Trick $trick)
     {
-
         $this->initPictures($trick);
         return $trick;
-
     }
 
     public function initPictures(Trick $trick)
@@ -96,55 +87,38 @@ class TrickManager
         foreach ($files as $file) {
             if ($file->getId() !== null && $file->getFile() === null) {
                 $file->setFile($file->getFileName());
-            }
-            elseif ($file->getId() === null && $file->getFile() !== null)
-            {
+            } elseif ($file->getId() === null && $file->getFile() !== null) {
                 $newTrick->addPicture($file);
-            }
-            elseif ($file->getId() !== null && $file->getFile() !== null)
-            {
+            } elseif ($file->getId() !== null && $file->getFile() !== null) {
                 $newTrick->addPicture($file);
                 $this->removeFile->remove($file->getFileName());
-
             }
         }
 
         //set filename to frontPicture on unchange files and add news pictures
-        if($newTrick->getFrontPicture() === null && $newTrick->getFrontPictureName() !== null)
-        {
+        if ($newTrick->getFrontPicture() === null && $newTrick->getFrontPictureName() !== null) {
             $newTrick->setFrontPicture($newTrick->getFrontPictureName());
-        }
-        else
-        {
-            if($newTrick->getFrontPictureName() !== null)
-            {
+        } else {
+            if ($newTrick->getFrontPictureName() !== null) {
                 $this->removeFile->remove($newTrick->getFrontPictureName());
             }
-
         }
 
         return $newTrick;
-
     }
 
     public function deleteTrick(Trick $trick)
     {
-
         foreach ($trick->getPictures() as $picture) {
             $this->removeFile->remove($picture->getFile());
         }
 
         // delete frontPicture from server
-        if($trick->getFrontPicture() !== null)
-        {
+        if ($trick->getFrontPicture() !== null) {
             $this->removeFile->remove($trick->getFrontPicture());
         }
 
         $this->em->remove($trick);
         $this->em->flush();
-
     }
-
-
-
 }

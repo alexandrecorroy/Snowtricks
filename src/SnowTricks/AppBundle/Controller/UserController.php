@@ -26,14 +26,9 @@ class UserController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-
-            if($user->getPicture() !== null && $savePictureUser !== null)
-            {
+            if ($user->getPicture() !== null && $savePictureUser !== null) {
                 $removeFile->remove($savePictureUser);
-            }
-            elseif($savePictureUser !== null)
-            {
+            } elseif ($savePictureUser !== null) {
                 $user->setPicture($savePictureUser);
             }
 

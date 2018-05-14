@@ -8,10 +8,8 @@
 
 namespace SnowTricks\AppBundle\Service;
 
-
 class Slugger
 {
-
     public function slugify($slug)
     {
         // replace non letter or digits by -
@@ -32,5 +30,4 @@ class Slugger
         // lowercase
         return strtolower($slug);
     }
-
 }

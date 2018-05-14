@@ -37,7 +37,8 @@ class ResetPasswordType extends AbstractType
                         'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$/',
                         'match' => true,
                         'message' => 'Your password must contain at least 8 characters string with at least one digit, one upper case letter, one lower case letter and one special symbol'
-                    ])
+                    ]
+                    )
                 ]
 
         ))
@@ -45,7 +46,8 @@ class ResetPasswordType extends AbstractType
         ;
     }
 
-    public function getBlockPrefix() {
+    public function getBlockPrefix()
+    {
         return null;
     }
 }

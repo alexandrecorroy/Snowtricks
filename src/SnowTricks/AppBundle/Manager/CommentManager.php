@@ -8,14 +8,12 @@
 
 namespace SnowTricks\AppBundle\Manager;
 
-
 use Doctrine\ORM\EntityManagerInterface;
 use SnowTricks\AppBundle\Entity\Comment;
 use SnowTricks\AppBundle\Entity\Trick;
 
 class CommentManager
 {
-
     private $comment;
     private $em;
 
@@ -40,5 +38,4 @@ class CommentManager
     {
         return $this->em->getRepository('SnowTricksAppBundle:Comment')->findCommentsByTrick($trick->getId());
     }
-
 }

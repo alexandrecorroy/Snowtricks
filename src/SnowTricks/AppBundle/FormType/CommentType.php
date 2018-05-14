@@ -27,7 +27,6 @@ class CommentType extends AbstractType
                     'class' => 'mt-3'
                 )
             ));
-
     }/**
      * {@inheritdoc}
      */
@@ -46,6 +45,4 @@ class CommentType extends AbstractType
     {
         return 'snowtricks_appbundle_comment';
     }
-
-
 }

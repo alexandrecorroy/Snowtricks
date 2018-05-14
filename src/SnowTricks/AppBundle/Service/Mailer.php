@@ -8,12 +8,10 @@
 
 namespace SnowTricks\AppBundle\Service;
 
-
 use SnowTricks\AppBundle\Entity\User;
 
 class Mailer
 {
-
     private $twig;
     private $mailer;
     private $mailerFrom;
@@ -31,10 +29,13 @@ class Mailer
             ->setSubject($subject)
             ->setFrom($this->getMailerFrom())
             ->setTo($user->getEmail())
-            ->setBody($this->twig->render(
-                '@SnowTricksApp/User/Emails/'.$template.'.html.twig', array(
+            ->setBody(
+                $this->twig->render(
+                '@SnowTricksApp/User/Emails/'.$template.'.html.twig',
+                array(
                     'username' => $user->getUsername(),
-                    'token' => $user->getToken())),
+                    'token' => $user->getToken())
+            ),
                 'text/html'
             );
         $this->mailer->send($message);
@@ -44,5 +45,4 @@ class Mailer
     {
         return $this->mailerFrom;
     }
-
 }

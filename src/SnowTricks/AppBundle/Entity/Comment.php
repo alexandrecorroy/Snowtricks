@@ -147,4 +147,3 @@ class Comment
         return $this->createDate;
     }
 }
-

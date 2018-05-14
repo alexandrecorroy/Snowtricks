@@ -5,7 +5,6 @@ namespace SnowTricks\AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 /**
  * Picture
  *
@@ -72,7 +71,6 @@ class Picture
      */
     public function setFile($file)
     {
-
         $this->file = $file;
 
         return $this;
@@ -103,7 +101,4 @@ class Picture
     {
         $this->fileName = $fileName;
     }
-
-
 }
-

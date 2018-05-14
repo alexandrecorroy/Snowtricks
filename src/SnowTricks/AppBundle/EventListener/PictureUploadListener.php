@@ -7,6 +7,7 @@
  */
 
 namespace SnowTricks\AppBundle\EventListener;
+
 use SnowTricks\AppBundle\Service\FileUploader;
 use SnowTricks\AppBundle\Entity\Picture;
 use SnowTricks\AppBundle\Entity\Trick;
@@ -14,7 +15,6 @@ use SnowTricks\AppBundle\Entity\User;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-
 
 class PictureUploadListener
 {
@@ -74,6 +74,5 @@ class PictureUploadListener
             $fileName = $this->uploader->upload($file);
             $entity->setPicture($fileName);
         }
-
     }
 }

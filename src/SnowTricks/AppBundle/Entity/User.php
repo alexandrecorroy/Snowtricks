@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 /**
  * User
  *
@@ -99,12 +98,14 @@ class User implements AdvancedUserInterface, \Serializable
         $this->salt = md5(uniqid('', true));
     }
 
-    public function getRoles() { return array('ROLE_USER'); }
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
 
     public function getSalt()
     {
         return $this->salt;
-
     }
 
     public function setSalt($salt)
@@ -116,7 +117,6 @@ class User implements AdvancedUserInterface, \Serializable
 
     public function eraseCredentials()
     {
-
     }
 
     public function isAccountNonExpired()
@@ -300,7 +300,7 @@ class User implements AdvancedUserInterface, \Serializable
 
     public function unserialize($serialized)
     {
-        list (
+        list(
             $this->id,
             $this->username,
             $this->email,
@@ -311,4 +311,3 @@ class User implements AdvancedUserInterface, \Serializable
             ) = unserialize($serialized);
     }
 }
-

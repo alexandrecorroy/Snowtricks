@@ -33,6 +33,4 @@ class VideoType extends AbstractType
     {
         return 'snowtricks_appbundle_video';
     }
-
-
 }

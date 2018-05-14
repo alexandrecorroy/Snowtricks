@@ -37,7 +37,6 @@ class TrickController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $trickManager->addPictures($trick->getPictures());
             $trickManager->addVideos($trick->getVideos());
 
@@ -66,7 +65,6 @@ class TrickController extends Controller
      */
     public function editAction(Trick $trick, Request $request, TrickManager $trickManager, Slugger $slugger)
     {
-
         $oldTrick = $trickManager->saveOldTrick($trick);
 
         $form = $this->createForm(TrickType::class, $trick);
@@ -74,7 +72,6 @@ class TrickController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $trick = $trickManager->comparePicturesTrick($oldTrick, $trick);
 
             $trickManager->addVideos($trick->getVideos());
@@ -109,9 +106,7 @@ class TrickController extends Controller
      */
     public function deleteAction(Trick $trick, $csrf, TrickManager $trickManager)
     {
-
         if ($this->isCsrfTokenValid('delete-item', $csrf)) {
-
             $trickManager->deleteTrick($trick);
 
             $this->addFlash(
@@ -120,11 +115,9 @@ class TrickController extends Controller
             );
 
             return $this->redirectToRoute('snow_tricks_homepage');
-        }
-        else
+        } else {
             throw new InvalidCsrfTokenException('Bad Csrf Token');
-
-
+        }
     }
 
     /**
@@ -133,14 +126,12 @@ class TrickController extends Controller
      */
     public function viewAction(Trick $trick, CommentManager $commentManager, Request $request)
     {
-
         $comment = $commentManager->initComment();
 
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $comment->setUser($this->getUser());
             $comment->setTrick($trick);
             $commentManager->saveComment($comment);
@@ -154,7 +145,6 @@ class TrickController extends Controller
                 'id' => $trick->getId(),
                 'slug' => $trick->getSlug()
             ));
-
         }
 
         return $this->render('@SnowTricksApp/Trick/view_trick.twig', array(
@@ -193,5 +183,4 @@ class TrickController extends Controller
         $response = new JsonResponse();
         return $response->setData($view);
     }
-
 }
