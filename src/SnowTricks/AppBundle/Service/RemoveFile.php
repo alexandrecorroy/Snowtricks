@@ -8,20 +8,23 @@
 
 namespace SnowTricks\AppBundle\Service;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 class RemoveFile
 {
-    private $container;
+    private $targetDirectory;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct($targetDirectory)
     {
-        $this->container = $container;
+        $this->targetDirectory = $targetDirectory;
     }
 
 
     public function remove($file)
     {
-        unlink($this->container->getParameter('pictures_directory').'/'.$file);
+        unlink($this->getTargetDirectory().'/'.$file);
+    }
+
+    public function getTargetDirectory()
+    {
+        return $this->targetDirectory;
     }
 }

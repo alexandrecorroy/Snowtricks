@@ -7,6 +7,8 @@
 
         {{ include('@SnowTricksApp/Trick/modals/delete_trick.html.twig') }}
 
+        {{ include('@SnowTricksApp/Trick/header_trick.twig') }}
+
         <header class="masthead content" id="front_picture" style="background-image:
                 {% if trick.frontPicture is defined and trick.frontPicture is not null %}
                     url('{{ asset('uploads/pictures/' ~ trick.frontPicture) }}');">
@@ -71,11 +73,8 @@
                 {% endif %}</i>
         </div>
 
-
-        {% if app.user %}
         {#Form comment#}
         {{ include("@SnowTricksApp/Comment/form.html.twig") }}
-        {% endif %}
 
         {#List comments#}
 

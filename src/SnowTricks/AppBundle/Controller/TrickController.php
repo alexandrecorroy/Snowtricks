@@ -10,10 +10,9 @@ namespace SnowTricks\AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use SnowTricks\AppBundle\Entity\Comment;
 use SnowTricks\AppBundle\Entity\Trick;
-use SnowTricks\AppBundle\FormType\CommentType;
-use SnowTricks\AppBundle\FormType\TrickType;
+use SnowTricks\AppBundle\Form\Type\CommentType;
+use SnowTricks\AppBundle\Form\Type\TrickType;
 use SnowTricks\AppBundle\Manager\CommentManager;
 use SnowTricks\AppBundle\Manager\TrickManager;
 use SnowTricks\AppBundle\Service\Slugger;

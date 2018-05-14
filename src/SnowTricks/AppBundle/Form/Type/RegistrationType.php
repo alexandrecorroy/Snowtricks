@@ -6,29 +6,25 @@
  * Time: 11:05
  */
 
-namespace SnowTricks\AppBundle\FormType;
+namespace SnowTricks\AppBundle\Form\Type;
 
 use SnowTricks\AppBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
-class DashboardType extends AbstractType
+class RegistrationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('username')
             ->add('email', EmailType::class)
-            ->add('picture', FileType::class, array(
-                'required' => false,
-                'label' => 'Update your avatar',
-                'data_class' => null
-            ))
-            ->add('register', SubmitType::class, array('label' => 'Update my account'))
+            ->add('password', PasswordType::class)
+            ->add('register', SubmitType::class, array('label' => 'Create an account'))
         ;
     }
 

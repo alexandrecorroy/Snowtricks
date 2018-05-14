@@ -5,8 +5,8 @@ namespace SnowTricks\AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SnowTricks\AppBundle\Entity\User;
-use SnowTricks\AppBundle\FormType\DashboardType;
-use SnowTricks\AppBundle\Service\RemoveFile;
+use SnowTricks\AppBundle\Form\Type\DashboardType;
+use SnowTricks\AppBundle\Manager\UserManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,7 +15,7 @@ class UserController extends Controller
     /**
      * @Route("/dashboard", name="snow_tricks_user_dashboard")
      */
-    public function dashboardAction(Request $request, RemoveFile $removeFile)
+    public function dashboardAction(Request $request, UserManager $userManager)
     {
         $user = $this->getUser();
 
@@ -26,15 +26,10 @@ class UserController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($user->getPicture() !== null && $savePictureUser !== null) {
-                $removeFile->remove($savePictureUser);
-            } elseif ($savePictureUser !== null) {
-                $user->setPicture($savePictureUser);
-            }
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+            $userManager->compareAvatars($savePictureUser, $user);
+
+            $userManager->saveUser($user);
 
             $this->addFlash(
                 'notice',
@@ -53,15 +48,10 @@ class UserController extends Controller
      * @Route("/dashboard/user/{id}/deletePicture", requirements={"id" = "\d+"}, name="snow_tricks_user_dashboard_deletePicture")
      * @ParamConverter("user", class="SnowTricksAppBundle:User")
      */
-    public function deleteUserPictureAction(User $user, RemoveFile $removeFile)
+    public function deleteUserPictureAction(User $user, UserManager $userManager)
     {
-        $em = $this->getDoctrine()->getManager();
 
-        $removeFile->remove($user->getPicture());
-        $user->setPicture(null);
-
-        $em->persist($user);
-        $em->flush();
+        $userManager->deleteAvatar($user);
 
         $this->addFlash(
             'notice',

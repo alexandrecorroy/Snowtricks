@@ -28,6 +28,10 @@ services:
         class: SnowTricks\AppBundle\Service\FileUploader
         arguments: ['%pictures_directory%']
 
+    SnowTricks\AppBundle\Service\RemoveFile:
+        arguments:
+            $targetDirectory: '%pictures_directory%'
+
     SnowTricks\AppBundle\Service\Mailer:
         arguments:
             $mailerFrom: '%mailer_from%'

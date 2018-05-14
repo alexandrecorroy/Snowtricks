@@ -4,10 +4,13 @@ namespace SnowTricks\AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SnowTricks\AppBundle\Entity\User;
-use SnowTricks\AppBundle\FormType\ForgotPasswordType;
-use SnowTricks\AppBundle\FormType\RegistrationType;
-use SnowTricks\AppBundle\FormType\ResetPasswordType;
+use SnowTricks\AppBundle\Form\Type\ForgotPasswordType;
+use SnowTricks\AppBundle\Form\Type\RegistrationType;
+use SnowTricks\AppBundle\Form\Type\ResetPasswordType;
+use SnowTricks\AppBundle\Manager\UserManager;
 use SnowTricks\AppBundle\Service\Mailer;
+use SnowTricks\AppBundle\Service\PasswordEncoder;
+use SnowTricks\AppBundle\Service\TokenGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -38,23 +41,21 @@ class SecurityController extends Controller
     /**
      * @Route("/registration", name="snow_tricks_user_registration")
      */
-    public function registerAction(Request $request, Mailer $mailer)
+    public function registerAction(Request $request, Mailer $mailer, TokenGenerator $tokenGenerator, UserManager $userManager, PasswordEncoder $passwordEncoder)
     {
-        $user = new User();
+        $user = $userManager->initUser();
 
         $form = $this->createForm(RegistrationType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setToken($this::generateToken($user));
 
-            $user->setPassword($this->encodePassword($user, $user->getPassword()));
+            $user->setToken($tokenGenerator->generateToken($user));
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+            $user->setPassword($passwordEncoder->encodePassword($user, $user->getPassword()));
 
+            $userManager->saveUser($user);
 
             $mailer->sendMail($user, 'Confirm account', 'registration');
 
@@ -71,44 +72,15 @@ class SecurityController extends Controller
         ));
     }
 
-    public function encodePassword(User $user, $password)
-    {
-        $factory = $this->get('security.encoder_factory');
-
-        $encoder = $factory->getEncoder($user);
-        return $encoder->encodePassword($password, $user->getSalt());
-    }
-
-    public static function generateToken(User $user)
-    {
-        $data = $user->getEmail().uniqid().microtime();
-        return hash('sha512', $data);
-    }
-
     /**
      * @Route("/token/{token}", name="snow_tricks_user_tokenVerification")
      */
-    public function tokenVerificationAction($token)
+    public function tokenVerificationAction($token, UserManager $userManager)
     {
         $repository = $this->getDoctrine()->getRepository(User::class);
         $user = $repository->findOneBy(['token' => $token]);
 
-        if (!$user->isEnabled()) {
-            $user->setIsActive(true);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-
-            $this->addFlash(
-                'notice',
-                'Your account is active !'
-            );
-        } else {
-            $this->addFlash(
-                'notice',
-                'Account already active !'
-            );
-        }
+        $userManager->activeUser($user);
 
         return $this->redirectToRoute('snow_tricks_homepage');
     }
@@ -116,7 +88,7 @@ class SecurityController extends Controller
     /**
      * @Route("/forgot_password", name="snow_tricks_user_forgotPassword")
      */
-    public function forgotPasswordAction(Request $request, Mailer $mailer)
+    public function forgotPasswordAction(Request $request, Mailer $mailer, TokenGenerator $tokenGenerator, UserManager $userManager)
     {
         $form = $this->createForm(ForgotPasswordType::class);
 
@@ -130,11 +102,10 @@ class SecurityController extends Controller
             );
 
             if ($user) {
-                $user->setToken($this::generateToken($user));
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
+                $user->setToken($tokenGenerator->generateToken($user));
+
+                $userManager->saveUser($user);
 
                 $mailer->sendMail($user, 'Reset your password', 'forgot_password');
             }
@@ -155,7 +126,7 @@ class SecurityController extends Controller
     /**
      * @Route("/reset_password/{token}", name="snow_tricks_user_resetPassword")
      */
-    public function resetPasswordAction(Request $request)
+    public function resetPasswordAction(Request $request, PasswordEncoder $passwordEncoder, UserManager $userManager)
     {
 
         // on récupére le userToken
@@ -192,14 +163,12 @@ class SecurityController extends Controller
             );
 
             // compare si userToken et user === username
-            if ($user->getUsername()===$userToken->getUsername()) {
+            if ($user->getUsername() === $userToken->getUsername()) {
 
                 // on modifie le mot de passe de user
-                $user->setPassword($this->encodePassword($user, $request->get('password')));
+                $user->setPassword($passwordEncoder->encodePassword($user, $request->get('password')));
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
+                $userManager->saveUser($user);
             }
 
             // renvoi sur home avec message
