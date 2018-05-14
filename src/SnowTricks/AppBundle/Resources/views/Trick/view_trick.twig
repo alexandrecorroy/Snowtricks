@@ -9,27 +9,6 @@
 
         {{ include('@SnowTricksApp/Trick/header_trick.twig') }}
 
-        <header class="masthead content" id="front_picture" style="background-image:
-                {% if trick.frontPicture is defined and trick.frontPicture is not null %}
-                    url('{{ asset('uploads/pictures/' ~ trick.frontPicture) }}');">
-                {% else %}
-                        url('/img/none.png');">
-                {% endif %}
-            {% if app.user %}
-            <div class="fai">
-                <a href="{{ path('snow_tricks_trick_edit', {id: trick.id}) }}"><i class="fa fa-pencil cursor"></i></a>
-                <a href="#" data-href="{{ path('snow_tricks_trick_delete', {id: trick.id, csrf: csrf_token('delete-item')}) }}" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash cursor"></i></a>
-            </div>
-            {% endif %}
-            <div class="intro-text">
-
-                <div class="intro-heading col-lg-4 mx-auto text-center">
-                    {{ trick.name }}
-                </div>
-
-            </div>
-        </header>
-
             <div class="album py-5 bg">
                 <div class="container">
                     <div class="row">
