@@ -8,7 +8,6 @@
 
 namespace SnowTricks\AppBundle\Manager;
 
-
 use Doctrine\ORM\EntityManagerInterface;
 use SnowTricks\AppBundle\Entity\User;
 use SnowTricks\AppBundle\Service\RemoveFile;
@@ -16,7 +15,6 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class UserManager
 {
-
     private $removeFile;
     private $em;
     private $user;
@@ -80,5 +78,4 @@ class UserManager
             );
         }
     }
-
 }

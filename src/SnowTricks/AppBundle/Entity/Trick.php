@@ -16,6 +16,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Trick
 {
+
+    const MIN_NAME_LENGTH = 6;
+    const MAX_NAME_LENGTH = 64;
+    const MIN_DESCRIPTION_LENGTH = 128;
+    const MAX_DESCRIPTION_LENGTH = 2048;
+
     /**
      * @var int
      *
@@ -31,8 +37,8 @@ class Trick
      *     message= "Name cannot be empty."
      * )
      * @Assert\Length(
-     *      min = 6,
-     *      max = 64,
+     *      min = TRICK::MIN_NAME_LENGTH,
+     *      max = TRICK::MAX_NAME_LENGTH,
      *      minMessage = "Name of trick must be at least {{ limit }} characters long",
      *      maxMessage = "Name of trick cannot be longer than {{ limit }} characters"
      * )
@@ -53,8 +59,8 @@ class Trick
      *     message= "Description cannot be empty."
      * )
      * @Assert\Length(
-     *      min = 128,
-     *      max = 2048,
+     *      min = TRICK::MIN_DESCRIPTION_LENGTH,
+     *      max = TRICK::MAX_DESCRIPTION_LENGTH,
      *      minMessage = "Description must be at least {{ limit }} characters long",
      *      maxMessage = "Name of trick cannot be longer than {{ limit }} characters"
      * )

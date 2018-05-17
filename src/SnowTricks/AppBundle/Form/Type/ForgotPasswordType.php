@@ -8,6 +8,7 @@
 
 namespace SnowTricks\AppBundle\Form\Type;
 
+use SnowTricks\AppBundle\Entity\User;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -19,7 +20,7 @@ class ForgotPasswordType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('username', TextType::class, array(
-            'constraints' => new Length(array('min' => 6))
+            'constraints' => new Length(array('min' => User::USERNAME_MIN_LENGTH))
         ))
             ->add('reset', SubmitType::class, array('label' => 'Ask for reset password'))
         ;

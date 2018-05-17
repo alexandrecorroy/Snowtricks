@@ -1,0 +1,7 @@
+<div>
+    <ul class="text-danger text-left">
+        {% for error in form.vars.errors.form.getErrors(true) %}
+            <li>{{ error.message }}</li>
+        {% endfor %}
+    </ul>
+</div>

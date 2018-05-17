@@ -8,14 +8,13 @@
 
 namespace SnowTricks\AppBundle\Service;
 
+use SnowTricks\AppBundle\Entity\User;
 
 class TokenGenerator
 {
-
     public static function generateToken(User $user)
     {
         $data = $user->getEmail().uniqid().microtime();
         return hash('sha512', $data);
     }
-
 }

@@ -14,6 +14,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements AdvancedUserInterface, \Serializable
 {
+    const USERNAME_MIN_LENGTH = 6;
+    const USERNAME_MAX_LENGTH = 32;
+
     /**
      * @var int
      *
@@ -27,8 +30,8 @@ class User implements AdvancedUserInterface, \Serializable
      * @var string
      * @Assert\NotBlank()
      * @Assert\Length(
-     *      min = 6,
-     *      max = 32,
+     *      min = USER::USERNAME_MIN_LENGTH,
+     *      max = USER::USERNAME_MAX_LENGTH,
      *      minMessage = "Your first name must be at least {{ limit }} characters long",
      *      maxMessage = "Your first name cannot be longer than {{ limit }} characters"
      * )
