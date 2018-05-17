@@ -2,6 +2,8 @@
 
 namespace SnowTricks\AppBundle\Form\Type;
 
+use SnowTricks\AppBundle\Entity\Category;
+use SnowTricks\AppBundle\Entity\Trick;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -34,7 +36,7 @@ class TrickType extends AbstractType
             )))
             ->add('category', EntityType::class, array(
                 'label' => false,
-                'class' => 'SnowTricks\AppBundle\Entity\Category',
+                'class' => Category::class,
                 'choice_label' => 'name'
             ))
             ->add('pictures', CollectionType::class, array(
@@ -64,7 +66,7 @@ class TrickType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'SnowTricks\AppBundle\Entity\Trick',
+            'data_class' => Trick::class,
             'attr'=>array('novalidate'=>'novalidate')
         ));
     }

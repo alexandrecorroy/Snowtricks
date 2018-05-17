@@ -2,6 +2,7 @@
 
 namespace SnowTricks\AppBundle\Form\Type;
 
+use SnowTricks\AppBundle\Entity\Video;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,7 +23,7 @@ class VideoType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'SnowTricks\AppBundle\Entity\Video'
+            'data_class' => Video::class
         ));
     }
 

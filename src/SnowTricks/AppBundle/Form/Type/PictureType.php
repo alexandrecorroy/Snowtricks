@@ -2,6 +2,7 @@
 
 namespace SnowTricks\AppBundle\Form\Type;
 
+use SnowTricks\AppBundle\Entity\Picture;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -30,7 +31,7 @@ class PictureType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'SnowTricks\AppBundle\Entity\Picture'
+            'data_class' => Picture::class
         ));
     }
 

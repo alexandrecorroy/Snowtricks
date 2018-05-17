@@ -24,26 +24,25 @@ class ResetPasswordType extends AbstractType
         $builder->add('email', EmailType::class, array(
             'constraints' =>
                 [
-                new NotBlank(),
-                new Email()
-                ]
-        ))
-                 ->add('password', PasswordType::class, array(
-            'constraints'=>
-                [
                     new NotBlank(),
-                    new Regex(
-                    [
-                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$/',
-                        'match' => true,
-                        'message' => 'Your password must contain at least 8 characters string with at least one digit, one upper case letter, one lower case letter and one special symbol'
-                    ]
-                    )
+                    new Email()
                 ]
-
         ))
-                ->add('reset', SubmitType::class, array('label' => 'Reset'))
-        ;
+            ->add('password', PasswordType::class, array(
+                'constraints' =>
+                    [
+                        new NotBlank(),
+                        new Regex(
+                            [
+                                'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$/',
+                                'match' => true,
+                                'message' => 'Your password must contain at least 8 characters string with at least one digit, one upper case letter, one lower case letter and one special symbol'
+                            ]
+                        )
+                    ]
+
+            ))
+            ->add('reset', SubmitType::class, array('label' => 'Reset'));
     }
 
     public function getBlockPrefix()

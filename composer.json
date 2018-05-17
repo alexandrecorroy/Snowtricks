@@ -5,7 +5,7 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "SnowTricks\\AppBundle\\": "src/SnowTricks/AppBundle"
         },
         "classmap": [
             "app/AppKernel.php",

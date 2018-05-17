@@ -2,6 +2,7 @@
 
 namespace SnowTricks\AppBundle\Form\Type;
 
+use SnowTricks\AppBundle\Entity\Comment;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -33,7 +34,7 @@ class CommentType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'SnowTricks\AppBundle\Entity\Comment',
+            'data_class' => Comment::class,
             'attr'=>array('novalidate'=>'novalidate')
         ));
     }

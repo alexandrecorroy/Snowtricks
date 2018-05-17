@@ -30,8 +30,8 @@ class User implements AdvancedUserInterface, \Serializable
      * @var string
      * @Assert\NotBlank()
      * @Assert\Length(
-     *      min = USER::USERNAME_MIN_LENGTH,
-     *      max = USER::USERNAME_MAX_LENGTH,
+     *      min = User::USERNAME_MIN_LENGTH,
+     *      max = User::USERNAME_MAX_LENGTH,
      *      minMessage = "Your first name must be at least {{ limit }} characters long",
      *      maxMessage = "Your first name cannot be longer than {{ limit }} characters"
      * )

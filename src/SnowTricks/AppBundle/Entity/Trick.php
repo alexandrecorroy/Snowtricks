@@ -37,8 +37,8 @@ class Trick
      *     message= "Name cannot be empty."
      * )
      * @Assert\Length(
-     *      min = TRICK::MIN_NAME_LENGTH,
-     *      max = TRICK::MAX_NAME_LENGTH,
+     *      min = Trick::MIN_NAME_LENGTH,
+     *      max = Trick::MAX_NAME_LENGTH,
      *      minMessage = "Name of trick must be at least {{ limit }} characters long",
      *      maxMessage = "Name of trick cannot be longer than {{ limit }} characters"
      * )
@@ -59,8 +59,8 @@ class Trick
      *     message= "Description cannot be empty."
      * )
      * @Assert\Length(
-     *      min = TRICK::MIN_DESCRIPTION_LENGTH,
-     *      max = TRICK::MAX_DESCRIPTION_LENGTH,
+     *      min = Trick::MIN_DESCRIPTION_LENGTH,
+     *      max = Trick::MAX_DESCRIPTION_LENGTH,
      *      minMessage = "Description must be at least {{ limit }} characters long",
      *      maxMessage = "Name of trick cannot be longer than {{ limit }} characters"
      * )
@@ -99,6 +99,7 @@ class Trick
     private $frontPictureName;
 
     /**
+     * @Assert\Valid()
      * @ORM\OneToMany(targetEntity="SnowTricks\AppBundle\Entity\Picture", mappedBy="trick", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\JoinColumn(nullable=false)
      */

@@ -24,21 +24,18 @@ services:
         public: true
         tags: ['controller.service_arguments']
 
-    trick.image_uploader:
-        class: SnowTricks\AppBundle\Service\FileUploader
+    SnowTricks\AppBundle\Service\FileUploader:
         arguments: ['%pictures_directory%']
-
-    SnowTricks\AppBundle\Service\RemoveFile:
-        arguments:
-            $targetDirectory: '%pictures_directory%'
 
     SnowTricks\AppBundle\Service\Mailer:
         arguments:
             $mailerFrom: '%mailer_from%'
 
-    trick.doctrine_image_listener:
-            class: SnowTricks\AppBundle\EventListener\PictureUploadListener
-            arguments: ['@trick.image_uploader']
+    SnowTricks\AppBundle\Service\RemoveFile:
+        arguments:
+            $targetDirectory: '%pictures_directory%'
+
+    SnowTricks\AppBundle\EventListener\PictureUploadListener:
             tags:
                 - { name: doctrine.event_listener, event: prePersist }
                 - { name: doctrine.event_listener, event: preUpdate }

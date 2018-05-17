@@ -2,6 +2,7 @@
 
 namespace SnowTricks\AppBundle\Form\Type;
 
+use SnowTricks\AppBundle\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,7 +23,7 @@ class CategoryType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'SnowTricks\AppBundle\Entity\Category'
+            'data_class' => Category::class
         ));
     }
 

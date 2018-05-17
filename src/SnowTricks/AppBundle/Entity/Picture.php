@@ -23,6 +23,9 @@ class Picture
     private $id;
 
     /**
+     *@Assert\NotBlank(
+     *     message= "Picture cannot be empty."
+     * )
      * @var string
      * @ORM\Column(name="file", type="string", length=255)
      */
