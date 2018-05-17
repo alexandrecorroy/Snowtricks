@@ -18,7 +18,7 @@
 
     <section>
         <div class="row" id="tricks-data">
-            {{ render(controller('SnowTricksAppBundle:Trick:listTricks')) }}
+            {{ include('@SnowTricksApp/Trick/list_tricks_template.twig') }}
         </div>
         <div class="ajax-load text-center" style="display:none">
             <p><img src="http://demo.itsolutionstuff.com/plugin/loader.gif">Loading More post</p>

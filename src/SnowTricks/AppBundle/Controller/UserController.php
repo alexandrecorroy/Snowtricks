@@ -2,6 +2,7 @@
 
 namespace SnowTricks\AppBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SnowTricks\AppBundle\Entity\User;
@@ -14,6 +15,7 @@ class UserController extends Controller
 {
     /**
      * @Route("/dashboard", name="snow_tricks_user_dashboard")
+     * @Method("GET")
      */
     public function dashboardAction(Request $request, UserManager $userManager)
     {
@@ -27,9 +29,7 @@ class UserController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $userManager->compareAvatars($savePictureUser, $user);
-
-            $userManager->saveUser($user);
+            $userManager->updateUser($savePictureUser, $user);
 
             $this->addFlash(
                 'notice',
@@ -47,6 +47,7 @@ class UserController extends Controller
     /**
      * @Route("/dashboard/user/{id}/deletePicture", requirements={"id" = "\d+"}, name="snow_tricks_user_dashboard_deletePicture")
      * @ParamConverter("user", class="SnowTricksAppBundle:User")
+     * @Method("GET")
      */
     public function deleteUserPictureAction(User $user, UserManager $userManager)
     {

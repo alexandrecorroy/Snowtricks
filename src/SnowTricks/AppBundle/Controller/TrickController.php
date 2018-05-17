@@ -8,6 +8,7 @@
 
 namespace SnowTricks\AppBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SnowTricks\AppBundle\Entity\Trick;
@@ -15,19 +16,18 @@ use SnowTricks\AppBundle\Form\Type\CommentType;
 use SnowTricks\AppBundle\Form\Type\TrickType;
 use SnowTricks\AppBundle\Manager\CommentManager;
 use SnowTricks\AppBundle\Manager\TrickManager;
-use SnowTricks\AppBundle\Service\Slugger;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 
 class TrickController extends Controller
 {
     /**
      * @Route("/trick/add", name="snow_tricks_trick_add")
+     * @Method({"GET","POST"})
      */
-    public function addAction(Request $request, TrickManager $trickManager, Slugger $slugger)
+    public function addAction(Request $request, TrickManager $trickManager)
     {
         $trick = $trickManager->initTrick();
 
@@ -36,13 +36,8 @@ class TrickController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $trickManager->addPictures($trick->getPictures());
-            $trickManager->addVideos($trick->getVideos());
 
-            // add slug
-            $trick->setSlug($slugger->slugify($trick->getName()));
-
-            $trickManager->saveTrick($trick);
+            $trickManager->createTrick($trick);
 
             $this->addFlash(
                 'notice',
@@ -61,8 +56,9 @@ class TrickController extends Controller
     /**
      * @Route("/trick/edit/{id}", requirements={"id" = "\d+"}, name="snow_tricks_trick_edit")
      * @ParamConverter("trick", class="SnowTricksAppBundle:Trick")
+     * @Method({"GET","POST"})
      */
-    public function editAction(Trick $trick, Request $request, TrickManager $trickManager, Slugger $slugger)
+    public function editAction(Trick $trick, Request $request, TrickManager $trickManager)
     {
         $oldTrick = $trickManager->saveOldTrick($trick);
 
@@ -71,17 +67,8 @@ class TrickController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $trick = $trickManager->comparePicturesTrick($oldTrick, $trick);
 
-            $trickManager->addVideos($trick->getVideos());
-
-            // update edit date
-            $trick->setEditDate(new \DateTime());
-
-            // update slug
-            $trick->setSlug($slugger->slugify($trick->getName()));
-
-            $trickManager->saveTrick($trick);
+            $trickManager->editTrick($oldTrick, $trick);
 
             $this->addFlash(
                 'notice',
@@ -89,7 +76,8 @@ class TrickController extends Controller
             );
 
             return $this->redirectToRoute('snow_tricks_trick_view', array(
-                'slug' => $trick->getSlug()
+                'slug' => $trick->getSlug(),
+                'id' => $trick->getId()
             ));
         }
 
@@ -102,6 +90,7 @@ class TrickController extends Controller
     /**
      * @Route("/trick/delete/{id}/{csrf}", requirements={"id" = "\d+"}, name="snow_tricks_trick_delete")
      * @ParamConverter("trick", class="SnowTricksAppBundle:Trick")
+     * @Method("GET")
      */
     public function deleteAction(Trick $trick, $csrf, TrickManager $trickManager)
     {
@@ -122,6 +111,7 @@ class TrickController extends Controller
     /**
      * @Route("/trick/{id}/{slug}", name="snow_tricks_trick_view")
      * @ParamConverter("trick", class="SnowTricksAppBundle:Trick")
+     * @Method({"GET","POST"})
      */
     public function viewAction(Trick $trick, CommentManager $commentManager, Request $request)
     {
@@ -131,13 +121,12 @@ class TrickController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $comment->setUser($this->getUser());
-            $comment->setTrick($trick);
-            $commentManager->saveComment($comment);
+
+            $commentManager->saveComment($comment, $trick);
 
             $this->addFlash(
                 'notice',
-                'Trick Added !'
+                'Comment Added !'
             );
 
             return $this->redirectToRoute('snow_tricks_trick_view', array(
@@ -153,33 +142,29 @@ class TrickController extends Controller
         ));
     }
 
-    public function listTricksAction()
+    /**
+     * @Route("/", name="snow_tricks_homepage")
+     * @Method("GET")
+     */
+    public function listTricksAction(TrickManager $trickManager)
     {
-        $em = $this->getDoctrine()->getManager();
-        $tricks = $em->getRepository('SnowTricksAppBundle:Trick')->listTricks();
-
-        if (null === $tricks) {
-            throw new NotFoundHttpException("No tricks found.");
-        }
-
-        return $this->render('@SnowTricksApp/Trick/list_tricks_template.twig', array(
-            'tricks' => $tricks
+        return $this->render('@SnowTricksApp/App/index.html.twig', array(
+            'tricks' => $trickManager->listFirstTricks()
         ));
     }
 
     /**
      * @Route("/trick/ajax/{last_trick_id}", requirements={"last_trick_id" = "\d+|null"}, name="snow_tricks_list_tricks_ajax")
+     * @Method("GET")
      */
-    public function listTricksAjaxAction($last_trick_id)
+    public function listTricksAjaxAction($last_trick_id, TrickManager $trickManager)
     {
-        $em = $this->getDoctrine()->getManager();
-        $tricks = $em->getRepository('SnowTricksAppBundle:Trick')->findOtherTricks($last_trick_id);
+        $response = new JsonResponse();
 
         $view = $this->renderView('@SnowTricksApp/Trick/list_tricks_template.twig', array(
-            'tricks' => $tricks,
+            'tricks' => $trickManager->jsonResponseOnTricks($last_trick_id)
         ));
 
-        $response = new JsonResponse();
         return $response->setData($view);
     }
 }

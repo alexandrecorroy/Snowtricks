@@ -12,18 +12,22 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use SnowTricks\AppBundle\Entity\Trick;
 use SnowTricks\AppBundle\Service\RemoveFile;
+use SnowTricks\AppBundle\Service\Slugger;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TrickManager
 {
     private $trick;
     private $em;
     private $removeFile;
+    private $slugger;
 
-    public function __construct(Trick $trick, EntityManagerInterface $em, RemoveFile $removeFile)
+    public function __construct(Trick $trick, EntityManagerInterface $em, RemoveFile $removeFile, Slugger $slugger)
     {
         $this->trick = $trick;
         $this->em = $em;
         $this->removeFile = $removeFile;
+        $this->slugger = $slugger;
     }
 
     public function initTrick()
@@ -31,18 +35,27 @@ class TrickManager
         return $this->trick;
     }
 
-    public function addPictures($pictures)
+    public function addPictures(Trick $trick)
     {
+        $pictures = $trick->getPictures();
+
         foreach ($pictures as $picture) {
             $this->trick->addPicture($picture);
         }
+
+        return $trick;
     }
 
-    public function addVideos($videos)
+    public function addVideos(Trick $trick)
     {
-        foreach ($videos as $video) {
-            $this->trick->addVideo($video);
+        $videos = $trick->getVideos();
+
+        foreach ($videos as $video)
+        {
+            $trick->addVideo($video);
         }
+
+        return $trick;
     }
 
     public function saveTrick(Trick $trick)
@@ -107,6 +120,30 @@ class TrickManager
         return $newTrick;
     }
 
+    public function editTrick(Trick $oldTrick, Trick $newTrick)
+    {
+        $trick = $this->comparePicturesTrick($oldTrick, $newTrick);
+
+        $trick = $this->addVideos($trick);
+
+        $trick->setEditDate(new \DateTime());
+
+        $trick->setSlug($this->slugger->slugify($trick->getName()));
+
+        $this->saveTrick($trick);
+    }
+
+    public function createTrick(Trick $trick)
+    {
+        $trick = $this->addPictures($trick);
+
+        $trick = $this->addVideos($trick);
+
+        $trick->setSlug($this->slugger->slugify($trick->getName()));
+
+        $this->saveTrick($trick);
+    }
+
     public function deleteTrick(Trick $trick)
     {
         foreach ($trick->getPictures() as $picture) {
@@ -121,4 +158,26 @@ class TrickManager
         $this->em->remove($trick);
         $this->em->flush();
     }
+
+    public function jsonResponseOnTricks($last_trick_id)
+    {
+        $tricks = $this->em->getRepository('SnowTricksAppBundle:Trick')->findOtherTricks($last_trick_id);
+
+        return $tricks;
+
+    }
+
+    public function listFirstTricks()
+    {
+
+        $tricks = $this->em->getRepository('SnowTricksAppBundle:Trick')->listTricks();
+
+        if (null === $tricks) {
+            throw new NotFoundHttpException("No tricks found.");
+        }
+
+        return $tricks;
+    }
+
+
 }

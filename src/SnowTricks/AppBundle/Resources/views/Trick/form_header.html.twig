@@ -1,6 +1,6 @@
 <header class="masthead content" id="front_picture" style="background-image:
-{% if trick.frontPicture is defined and trick.frontPicture is not null %}
-        url('{{ asset('uploads/pictures/' ~ trick.frontPicture) }}');">
+{% if trick.frontPictureName is defined and trick.frontPictureName is not null %}
+        url('{{ asset('uploads/pictures/' ~ trick.frontPictureName) }}');">
     {% else %}
         url('/img/none.png');">
     {% endif %}

@@ -9,8 +9,12 @@
 namespace SnowTricks\AppBundle\Manager;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use SnowTricks\AppBundle\Entity\User;
+use SnowTricks\AppBundle\Service\Mailer;
+use SnowTricks\AppBundle\Service\PasswordEncoder;
 use SnowTricks\AppBundle\Service\RemoveFile;
+use SnowTricks\AppBundle\Service\TokenGenerator;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class UserManager
@@ -19,13 +23,19 @@ class UserManager
     private $em;
     private $user;
     private $flashBag;
+    private $tokenGenerator;
+    private $passwordEncoder;
+    private $mailer;
 
-    public function __construct(RemoveFile $removeFile, EntityManagerInterface $em, User $user, FlashBagInterface $flashBag)
+    public function __construct(RemoveFile $removeFile, EntityManagerInterface $em, User $user, FlashBagInterface $flashBag, TokenGenerator $tokenGenerator, PasswordEncoder $passwordEncoder, Mailer $mailer)
     {
         $this->removeFile = $removeFile;
         $this->em = $em;
         $this->user = $user;
         $this->flashBag = $flashBag;
+        $this->tokenGenerator = $tokenGenerator;
+        $this->passwordEncoder = $passwordEncoder;
+        $this->mailer = $mailer;
     }
 
     public function initUser()
@@ -44,6 +54,13 @@ class UserManager
         $this->removeFile->remove($user->getPicture());
 
         $user->setPicture(null);
+
+        $this->saveUser($user);
+    }
+
+    public function updateUser($oldAvatar, User $user)
+    {
+        $user = $this->compareAvatars($oldAvatar, $user);
 
         $this->saveUser($user);
     }
@@ -76,6 +93,43 @@ class UserManager
                 'notice',
                 'Account already active !'
             );
+        }
+    }
+
+    public function createUser(User $user)
+    {
+
+        $user->setToken($this->tokenGenerator->generateToken($user));
+
+        $user->setPassword($this->passwordEncoder->encodePassword($user, $user->getPassword()));
+
+        $this->saveUser($user);
+
+        $this->mailer->sendMail($user, 'Confirm account', 'registration');
+
+    }
+
+    public function resetPassword(User $user)
+    {
+        if ($user) {
+
+            $user->setToken($this->tokenGenerator->generateToken($user));
+
+            $this->saveUser($user);
+
+            $this->mailer->sendMail($user, 'Reset your password', 'forgot_password');
+        }
+    }
+
+    public function updatePassword(User $user, User $userToken, $password)
+    {
+        // compare si userToken et user === username
+        if ($user->getUsername() === $userToken->getUsername()) {
+
+            // on modifie le mot de passe de user
+            $user->setPassword($this->passwordEncoder->encodePassword($user, $password));
+
+            $this->saveUser($user);
         }
     }
 }

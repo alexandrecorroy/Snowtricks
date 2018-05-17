@@ -75,9 +75,17 @@ $(document).ready(function() {
     }
 
     function onChange($id) {
-        $('#snowtricks_appbundle_trick_pictures_'+$id+'_file').change(function(){
+        var image = $('#snowtricks_appbundle_trick_pictures_'+$id+'_file');
+
+        image.change(function(){
             changePicture(this, $id);
         });
+
+        var imageName = $('#snowtricks_appbundle_trick_pictures_'+$id+'_fileName');
+        if(imageName.val()==='new')
+        {
+            imageName.val('update');
+        }
     }
 
     // partie video
@@ -142,7 +150,6 @@ $(document).ready(function() {
     // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
     $('#add_picture').click(function(e) {
         addPicture($container);
-        console.log($container);
         clone();
         e.preventDefault(); // évite qu'un # apparaisse dans l'URL
         return false;
@@ -171,6 +178,8 @@ $(document).ready(function() {
 
         // On ajoute le prototype modifié à la fin de la balise <div>
         $container.append($prototype);
+
+        $prototype.find("[id$='fileName']").val('new');
 
         // Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
         $index1++;

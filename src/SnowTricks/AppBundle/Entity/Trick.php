@@ -101,7 +101,7 @@ class Trick
     /**
      * @Assert\Valid()
      * @ORM\OneToMany(targetEntity="SnowTricks\AppBundle\Entity\Picture", mappedBy="trick", cascade={"persist", "remove"}, orphanRemoval=true)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $pictures;
 
@@ -112,7 +112,7 @@ class Trick
     private $videos;
 
     /**
-     * @ORM\OneToMany(targetEntity="SnowTricks\AppBundle\Entity\Comment", mappedBy="trick")
+     * @ORM\OneToMany(targetEntity="SnowTricks\AppBundle\Entity\Comment", mappedBy="trick", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $comments;
 

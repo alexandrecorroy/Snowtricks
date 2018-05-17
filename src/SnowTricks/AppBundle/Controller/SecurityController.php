@@ -2,6 +2,7 @@
 
 namespace SnowTricks\AppBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use SnowTricks\AppBundle\Entity\User;
 use SnowTricks\AppBundle\Form\Type\ForgotPasswordType;
@@ -20,7 +21,7 @@ class SecurityController extends Controller
     /**
      * @Route("/login", name="login")
      */
-    public function loginAction(Request $request)
+    public function loginAction()
     {
         // Si le visiteur est déjà identifié, on le redirige vers l'accueil
         if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -40,6 +41,7 @@ class SecurityController extends Controller
 
     /**
      * @Route("/registration", name="snow_tricks_user_registration")
+     * @Method({"GET","POST"})
      */
     public function registerAction(Request $request, Mailer $mailer, TokenGenerator $tokenGenerator, UserManager $userManager, PasswordEncoder $passwordEncoder)
     {
@@ -51,13 +53,7 @@ class SecurityController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $user->setToken($tokenGenerator->generateToken($user));
-
-            $user->setPassword($passwordEncoder->encodePassword($user, $user->getPassword()));
-
-            $userManager->saveUser($user);
-
-            $mailer->sendMail($user, 'Confirm account', 'registration');
+            $userManager->createUser($user);
 
             $this->addFlash(
                 'notice',
@@ -74,6 +70,7 @@ class SecurityController extends Controller
 
     /**
      * @Route("/token/{token}", name="snow_tricks_user_tokenVerification")
+     * @Method("GET")
      */
     public function tokenVerificationAction($token, UserManager $userManager)
     {
@@ -87,28 +84,23 @@ class SecurityController extends Controller
 
     /**
      * @Route("/forgot_password", name="snow_tricks_user_forgotPassword")
+     * @Method({"GET","POST"})
      */
-    public function forgotPasswordAction(Request $request, Mailer $mailer, TokenGenerator $tokenGenerator, UserManager $userManager)
+    public function forgotPasswordAction(Request $request, UserManager $userManager)
     {
         $form = $this->createForm(ForgotPasswordType::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $repository = $this->getDoctrine()->getRepository(User::class);
 
             $user = $repository->findOneBy(
                 array('username' => $request->get('username'))
             );
 
-            if ($user) {
-
-                $user->setToken($tokenGenerator->generateToken($user));
-
-                $userManager->saveUser($user);
-
-                $mailer->sendMail($user, 'Reset your password', 'forgot_password');
-            }
+            $userManager->resetPassword($user);
 
             $this->addFlash(
                 'notice',
@@ -125,16 +117,14 @@ class SecurityController extends Controller
 
     /**
      * @Route("/reset_password/{token}", name="snow_tricks_user_resetPassword")
+     * @Method({"GET","POST"})
      */
     public function resetPasswordAction(Request $request, PasswordEncoder $passwordEncoder, UserManager $userManager)
     {
 
-        // on récupére le userToken
-        $token = $request->get('token');
-
         $repository = $this->getDoctrine()->getRepository(User::class);
         $userToken = $repository->findOneBy(
-            array('token' => $token)
+            array('token' => $request->get('token'))
         );
 
         // si aucun token correspondant
@@ -162,14 +152,7 @@ class SecurityController extends Controller
                 array('email' => $request->get('email'))
             );
 
-            // compare si userToken et user === username
-            if ($user->getUsername() === $userToken->getUsername()) {
-
-                // on modifie le mot de passe de user
-                $user->setPassword($passwordEncoder->encodePassword($user, $request->get('password')));
-
-                $userManager->saveUser($user);
-            }
+            $userManager->updatePassword($user, $userToken, $request->get('password'));
 
             // renvoi sur home avec message
             $this->addFlash(
