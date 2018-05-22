@@ -134,9 +134,10 @@ $(document).ready(function() {
 
     function saveVideo($id) {
         var $url = $('#modalVideo'+$id).find('input').val();
+        $url = $url.replace("https://youtu.be/", "");
         $('#snowtricks_appbundle_trick_videos_'+$id+'_url').val($url);
         $('#modalVideo'+$id).modal('toggle');
-        $('#addVideo'+$id).find('iframe').attr('src', $url);
+        $('#addVideo'+$id).find('iframe').attr('src', 'https://www.youtube.com/embed/'+$url);
     }
 
     // partie ajout dynamique form

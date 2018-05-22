@@ -72,7 +72,7 @@
                         {% for video in trick.videos %}
                         <div class="col-md-4" id="addVideo{{ loop.index0 }}">
                             <div class="card mb-4 box-shadow">
-                                <iframe src="{{ video.url }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                <iframe src="https://www.youtube.com/embed/{{ video.url }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group mx-auto">
