@@ -23,6 +23,10 @@ class Picture
     private $id;
 
     /**
+     * @Assert\Image(
+     *     mimeTypes={"image/jpeg", "image/png"},
+     *     mimeTypesMessage="Only jpg, jpeg or png pictures"
+     * )
      * @var string
      * @ORM\Column(name="file", type="string", length=255)
      */

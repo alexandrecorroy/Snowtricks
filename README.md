@@ -62,6 +62,13 @@ Install fixtures :
 php bin/console doctrine:fixtures:load
 ```
 
+To test user features, an user will be created with : 
+
+```
+login : userdemo
+password : userdemo
+```
+
 ## Authors
 
 * **Corroy Alexandre** - *Initial work* - [CORROYAlexandre](https://github.com/alexandrecorroy)

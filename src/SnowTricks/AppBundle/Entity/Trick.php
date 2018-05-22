@@ -90,7 +90,10 @@ class Trick
 
     /**
      * @var string
-     *
+     * @Assert\Image(
+     *     mimeTypes={"image/jpeg", "image/png"},
+     *     mimeTypesMessage="Only jpg, jpeg or png pictures"
+     * )
      * @ORM\Column(name="front_picture", type="string", length=255, nullable=true)
      * @ORM\JoinColumn(nullable=true)
      */
@@ -106,6 +109,7 @@ class Trick
     private $pictures;
 
     /**
+     * @Assert\Valid()
      * @ORM\OneToMany(targetEntity="SnowTricks\AppBundle\Entity\Video", mappedBy="trick", cascade={"persist", "remove"}, orphanRemoval=true)
      * @ORM\JoinColumn(nullable=true)
      */

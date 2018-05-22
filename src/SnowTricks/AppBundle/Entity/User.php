@@ -69,7 +69,10 @@ class User implements AdvancedUserInterface, \Serializable
 
     /**
      * @var string
-     *
+     * @Assert\Image(
+     *     mimeTypes={"image/jpeg", "image/png"},
+     *     mimeTypesMessage="Only jpg, jpeg or png picture"
+     * )
      * @ORM\Column(name="picture", type="string", length=255, nullable=true)
      */
     private $picture;

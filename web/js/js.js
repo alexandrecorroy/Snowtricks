@@ -37,8 +37,6 @@ $(document).ready(function() {
     else
         cloneCount = 0;
 
-
-
     function clone() {
         $('#addPicture')
             .clone(true)
@@ -71,6 +69,12 @@ $(document).ready(function() {
             };
 
             reader.readAsDataURL(input.files[0]);
+
+            var imageName = $('#snowtricks_appbundle_trick_pictures_'+$id+'_fileName');
+            if(imageName.val()==='new')
+            {
+                imageName.val('update');
+            }
         }
     }
 
@@ -81,11 +85,6 @@ $(document).ready(function() {
             changePicture(this, $id);
         });
 
-        var imageName = $('#snowtricks_appbundle_trick_pictures_'+$id+'_fileName');
-        if(imageName.val()==='new')
-        {
-            imageName.val('update');
-        }
     }
 
     // partie video
@@ -157,14 +156,22 @@ $(document).ready(function() {
     });
 
     // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
-    if ($index1 === 0) {
-        addPicture($container);
-        clone();
-    } else {
+    if ($index1 > 0) {
         // S'il existe déjà des catégories, on ajoute un lien de suppression pour chacune d'entre elles
-        $container.children('div').each(function() {
-            addDeleteLink($(this));
-        });
+        if (window.location.href.indexOf("trick/edit") > -1) {
+            $container.children('div').each(function() {
+                addDeleteLink($(this));
+                clone();
+            });
+        }
+        else
+        {
+            for(var $i = 1; $i<$index1+1; $i++)
+            {
+            clone();
+            }
+        }
+
     }
 
     // La fonction qui ajoute un formulaire
@@ -219,11 +226,21 @@ $(document).ready(function() {
     });
 
     // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
-    if ($index !== 0) {
-        // S'il existe déjà des catégories, on ajoute un lien de suppression pour chacune d'entre elles
-        $container2.children('div').each(function() {
-            addDeleteLink($(this));
-        });
+    if ($index > 0) {
+
+        if (window.location.href.indexOf("trick/edit") > -1) {
+            $container2.children('div').each(function() {
+                addDeleteLink($(this));
+                cloneVideo();
+            });
+        }
+        else
+        {
+            for(var $i = 1; $i<$index+1; $i++)
+            {
+                cloneVideo();
+            }
+        }
     }
 
     // La fonction qui ajoute un formulaire CategoryType

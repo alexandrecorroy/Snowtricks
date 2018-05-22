@@ -23,6 +23,9 @@ class Video
     private $id;
 
     /**
+     * @Assert\NotNull(
+     *     message="You cannot submit an empty video !"
+     * )
      * @var string
      * @ORM\Column(name="url", type="string", length=255)
      */
