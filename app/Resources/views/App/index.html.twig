@@ -18,14 +18,14 @@
 
     <section>
         <div class="row" id="tricks-data">
-            {{ include('@SnowTricksApp/Trick/list_tricks_template.twig') }}
+            {{ include('Trick/list_tricks_template.twig') }}
         </div>
         <div class="ajax-load text-center" style="display:none">
             <p><img src="http://demo.itsolutionstuff.com/plugin/loader.gif">Loading More post</p>
         </div>
     </section>
 
-    {{ include('@SnowTricksApp/Trick/modals/delete_trick.html.twig') }}
+    {{ include('Trick/modals/delete_trick.html.twig') }}
 
     <i id="topButton" title="back to top" class="fa fa-arrow-up fa-5x"></i>
 

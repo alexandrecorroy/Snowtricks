@@ -31,7 +31,7 @@ class Mailer
             ->setTo($user->getEmail())
             ->setBody(
                 $this->twig->render(
-                '@SnowTricksApp/User/Emails/'.$template.'.html.twig',
+                'User/Emails/'.$template.'.html.twig',
                 array(
                     'username' => $user->getUsername(),
                     'token' => $user->getToken())

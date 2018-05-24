@@ -5,14 +5,14 @@
 
 {% block content %}
 
-    {{ include('@SnowTricksApp/Trick/form_errors.html.twig') }}
+    {{ include('Trick/form_errors.html.twig') }}
 
     <section class="nopadding col-lg-12 mx-auto text-center border border-dark">
 
 
         {{ form_start(form) }}
 
-        {{ include('@SnowTricksApp/Trick/form_header.html.twig') }}
+        {{ include('Trick/form_header.html.twig') }}
 
             <div class="album py-5 bg">
                 <div class="container">
@@ -98,8 +98,8 @@
         </div>
 
 
-        {% include('@SnowTricksApp/Trick/modals/form.html.twig') %}
-        {% include('@SnowTricksApp/Trick/modals/delete_trick.html.twig') %}
+        {% include('Trick/modals/form.html.twig') %}
+        {% include('Trick/modals/delete_trick.html.twig') %}
 
         {{ form_widget(form.pictures) }}
         {{ form_widget(form.videos) }}

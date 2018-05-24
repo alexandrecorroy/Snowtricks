@@ -47,7 +47,7 @@ class TrickController extends Controller
             return $this->redirectToRoute('snow_tricks_homepage');
         }
 
-        return $this->render('@SnowTricksApp/Trick/form.html.twig', array(
+        return $this->render('Trick/form.html.twig', array(
             'form' => $form->createView(),
             'errors' => $form->getErrors()
         ));
@@ -81,7 +81,7 @@ class TrickController extends Controller
             ));
         }
 
-        return $this->render('@SnowTricksApp/Trick/form.html.twig', array(
+        return $this->render('Trick/form.html.twig', array(
             'form' => $form->createView(),
             'trick' => $trick
         ));
@@ -135,7 +135,7 @@ class TrickController extends Controller
             ));
         }
 
-        return $this->render('@SnowTricksApp/Trick/view_trick.twig', array(
+        return $this->render('Trick/view_trick.twig', array(
             'trick' => $trick,
             'comments' => $commentManager->getFirstComments($trick),
             'form' => $form->createView()
@@ -148,7 +148,7 @@ class TrickController extends Controller
      */
     public function listTricksAction(TrickManager $trickManager)
     {
-        return $this->render('@SnowTricksApp/App/index.html.twig', array(
+        return $this->render('App/index.html.twig', array(
             'tricks' => $trickManager->listFirstTricks()
         ));
     }
@@ -161,7 +161,7 @@ class TrickController extends Controller
     {
         $response = new JsonResponse();
 
-        $view = $this->renderView('@SnowTricksApp/Trick/list_tricks_template.twig', array(
+        $view = $this->renderView('Trick/list_tricks_template.twig', array(
             'tricks' => $trickManager->jsonResponseOnTricks($last_trick_id)
         ));
 

@@ -5,9 +5,9 @@
 {% block content %}
     <section class="nopadding col-lg-12 mx-auto text-center border border-dark">
 
-        {{ include('@SnowTricksApp/Trick/modals/delete_trick.html.twig') }}
+        {{ include('Trick/modals/delete_trick.html.twig') }}
 
-        {{ include('@SnowTricksApp/Trick/header_trick.twig') }}
+        {{ include('Trick/header_trick.twig') }}
 
             <div class="album py-5 bg">
                 <div class="container">
@@ -53,11 +53,11 @@
         </div>
 
         {#Form comment#}
-        {{ include("@SnowTricksApp/Comment/form.html.twig") }}
+        {{ include("Comment/form.html.twig") }}
 
         {#List comments#}
 
-        {{ include("@SnowTricksApp/Comment/comments.html.twig") }}
+        {{ include("Comment/comments.html.twig") }}
 
     </section>
 

@@ -10,21 +10,20 @@ namespace SnowTricks\AppBundle\Service;
 
 
 use SnowTricks\AppBundle\Entity\User;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class PasswordEncoder
 {
-    private $encoderFactory;
+    private $userPasswordEncoder;
 
-    public function __construct(EncoderFactoryInterface $encoderFactory)
+    public function __construct(UserPasswordEncoderInterface $userPasswordEncoder)
     {
-        $this->encoderFactory = $encoderFactory;
+        $this->userPasswordEncoder = $userPasswordEncoder;
     }
 
     public function encodePassword(User $user, $password)
     {
-        $encoder = $this->encoderFactory->getEncoder($user);
-        return $encoder->encodePassword($password, $user->getSalt());
+        return $this->userPasswordEncoder->encodePassword($user, $password);
     }
 
 }

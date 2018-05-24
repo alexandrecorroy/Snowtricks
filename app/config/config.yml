@@ -22,7 +22,7 @@ framework:
     default_locale: '%locale%'
     trusted_hosts: ~
     session:
-        name: snowtricks
+        name: 464fsefes3f1sfr8fg6
         # https://symfony.com/doc/current/reference/configuration/framework.html#handler-id
         handler_id: session.handler.native_file
         save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'

@@ -19,7 +19,7 @@ class CommentController extends Controller
         $em = $this->getDoctrine()->getManager();
         $comments = $em->getRepository('SnowTricksAppBundle:Comment')->findOtherComments($id, $lastComment);
 
-        $view = $this->renderView('@SnowTricksApp/Comment/infinite_scroll_comments.html.twig', array(
+        $view = $this->renderView('Comment/infinite_scroll_comments.html.twig', array(
                 'comments' => $comments,
             ));
 

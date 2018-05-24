@@ -34,7 +34,7 @@ class SecurityController extends Controller
         // (mauvais mot de passe par exemple)
         $authenticationUtils = $this->get('security.authentication_utils');
 
-        return $this->render('@SnowTricksApp/User/Security/login.html.twig', array(
+        return $this->render('User/Security/login.html.twig', array(
             'last_username' => $authenticationUtils->getLastUsername(),
             'error'         => $authenticationUtils->getLastAuthenticationError(),
         ));
@@ -64,7 +64,7 @@ class SecurityController extends Controller
             return $this->redirectToRoute('snow_tricks_homepage');
         }
 
-        return $this->render('@SnowTricksApp/User/Security/registration.html.twig', array(
+        return $this->render('User/Security/registration.html.twig', array(
             'form' => $form->createView(),
         ));
     }
@@ -111,7 +111,7 @@ class SecurityController extends Controller
             return $this->redirectToRoute('snow_tricks_user_forgotPassword');
         }
 
-        return $this->render('@SnowTricksApp/User/Security/forgot_password.html.twig', array(
+        return $this->render('User/Security/forgot_password.html.twig', array(
             'form' => $form->createView(),
         ));
     }
@@ -163,7 +163,7 @@ class SecurityController extends Controller
             return $this->redirectToRoute('snow_tricks_homepage');
         }
 
-        return $this->render('@SnowTricksApp/User/Security/reset_password.html.twig', array(
+        return $this->render('User/Security/reset_password.html.twig', array(
             'form' => $form->createView(),
         ));
     }

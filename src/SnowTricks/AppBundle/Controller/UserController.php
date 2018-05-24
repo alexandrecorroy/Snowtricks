@@ -39,7 +39,7 @@ class UserController extends Controller
             return $this->redirectToRoute('snow_tricks_user_dashboard');
         }
 
-        return $this->render('@SnowTricksApp/User/dashboard.twig', array(
+        return $this->render('User/dashboard.twig', array(
             'form' => $form->createView()
         ));
     }

@@ -62,10 +62,7 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $password;
 
-    /**
-     * @ORM\Column(name="salt", type="string", length=32, unique=true)
-     */
-    private $salt;
+    private $salt = null;
 
     /**
      * @var string
@@ -99,11 +96,6 @@ class User implements AdvancedUserInterface, \Serializable
         return $this->username !== $this->password;
     }
 
-    public function __construct()
-    {
-        $this->salt = md5(uniqid('', true));
-    }
-
     public function getRoles()
     {
         return array('ROLE_USER');
@@ -112,13 +104,6 @@ class User implements AdvancedUserInterface, \Serializable
     public function getSalt()
     {
         return $this->salt;
-    }
-
-    public function setSalt($salt)
-    {
-        $this->salt = $salt;
-
-        return $this;
     }
 
     public function eraseCredentials()
