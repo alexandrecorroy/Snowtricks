@@ -6,15 +6,9 @@
     <div class="container">
         <!-- Jumbotron -->
         <div class="jumbotron">
-            <h1><i class="fa fa-frown-o red"></i> {{page.title}}</h1>
+            <h1><i class="fa fa-frown-o red"></i> 404</h1>
             <p class="lead">We couldn't find what you're looking for on <em><span id="display-domain"></span></em>.</p>
-            <p><a onclick="checkSite()" class="btn btn-default btn-lg"><span class="green">Take Me To The Homepage</span></a>
-                <script type="text/javascript">
-                    function checkSite(){
-                        var currentSite = window.location.hostname;
-                        window.location = "http://" + currentSite;
-                    }
-                </script>
+            <p><a href="{{ path('snow_tricks_homepage') }}" class="btn btn-default btn-lg"><span class="green">Take Me To The Homepage</span></a>
             </p>
         </div>
     </div>
