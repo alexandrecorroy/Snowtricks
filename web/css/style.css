@@ -61,7 +61,7 @@
     color: darkred;
 }
 
-#addPicture, #snowtricks_trickbundle_trick_pictures, #addVideo, #snowtricks_trickbundle_trick_videos{
+#addPicture, #snowtricks_appbundle_trick_pictures, #addVideo, #snowtricks_appbundle_trick_videos{
     display: none;
 }
 

@@ -1,0 +1,26 @@
+{% for trick in tricks %}
+<div class="col-lg-3 portfolio-item" id="{{ trick.id }}">
+    <a class="portfolio-link" href="{{ path('snow_tricks_trick_view', {slug: trick.slug, id: trick.id}) }}">
+        <div class="portfolio-hover">
+            <div class="portfolio-hover-content">
+                <i class="fa fa-plus fa-3x"></i>
+            </div>
+        </div>
+        {% if trick.frontPicture is not null %}
+        <img class="img-fluid" src="{{ asset('uploads/pictures/' ~ trick.frontPicture ) }}">
+        {% elseif trick.pictures[0] is defined %}
+        <img class="img-fluid" src="{{ asset('uploads/pictures/' ~ trick.pictures[0].file ) }}">
+        {% else %}
+        <img class="img-fluid" src="{{ asset('img/none_small.jpg') }}">
+        {% endif %}
+            </a>
+    <div class="row mt-4 p-1">
+        <h4 class="col-lg-6 under"><u><a href="{{ path('snow_tricks_trick_view', {slug: trick.slug, id: trick.id}) }}">{{ trick.name }}</a></u></h4>
+        <div class="col-lg-6 text-right">
+            <a href="{{ path('snow_tricks_trick_edit', {id: trick.id}) }}"><i class="fa fa-pencil col-lg-3"></i></a>
+            <a href="#" data-href="{{ path('snow_tricks_trick_delete', {id: trick.id, csrf: csrf_token('delete-item')}) }}" data-toggle="modal" data-target="#confirm-delete"><i class="fa fa-trash col-lg-3"></i></a>
+        </div>
+
+    </div>
+</div>
+{% endfor %}

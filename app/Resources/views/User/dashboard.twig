@@ -1,0 +1,49 @@
+{% extends "base.html.twig" %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <section class="nopadding col-lg-12 mx-auto text-center border border-dark">
+
+        <h1 class="intro-heading text-uppercase mt-2 mb-4" style="color: #5a6268;">Update Account</h1>
+
+
+        {{ form_start(form) }}
+
+        <div class="col-lg-10 mx-auto">
+            {{ form_label(form.username) }}
+            {{ form_widget(form.username) }}
+        </div>
+
+        <div class="col-lg-10 mx-auto mt-5 mb-5">
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email) }}
+        </div>
+
+        <div class="row mx-auto mt-5 mb-5">
+            <div class="col-lg-5 offset-lg-1">
+                <p>Current avatar</p><br>
+                {% if app.user.picture is null %}
+                    <img src="{{ asset('img/no_user_picture.jpg') }}" width="150px">
+                {% else %}
+                    <img src="{{ asset('uploads/pictures/' ~ app.user.picture) }}" width="150px"><br>
+                    <a class="btn btn-danger mt-3" href="{{ path('snow_tricks_user_dashboard_deletePicture', {id: app.user.id}) }}">Delete Avatar</a>
+
+                {% endif %}
+            </div>
+            <div class="col-lg-5">
+                {{ form_label(form.picture) }}
+                {{ form_widget(form.picture) }}
+            </div>
+        </div>
+
+
+        <div class="mx-auto">
+            {{ form_end(form) }}
+        </div>
+
+
+    </section>
+
+{% endblock %}

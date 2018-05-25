@@ -1,0 +1,24 @@
+<header class="masthead content" id="front_picture" style="background-image:
+{% if trick.frontPictureName is defined and trick.frontPictureName is not null %}
+        url('{{ asset('uploads/pictures/' ~ trick.frontPictureName) }}');">
+    {% else %}
+        url('/img/none.png');">
+    {% endif %}
+    <div class="fai">
+        <i class="fa fa-pencil cursor" data-toggle="modal"  data-backdrop="false" data-target="#frontPicture"></i>
+        <i class="fa fa-trash cursor" id="resetFrontPicture"></i>
+    </div>
+
+    <div class="fai2">
+        <i class="fa fa-camera cursor" title="add picture" id="add_picture"><i class="fa fa-plus fa-plus-position"></i></i>
+        <i class="fa fa-video-camera cursor" title="add video" id="add_video"><i class="fa fa-plus fa-plus-position2"></i></i>
+    </div>
+
+    <div class="intro-text">
+
+        <div class="intro-heading text-uppercase col-lg-4 mx-auto">
+            {{ form_widget(form.name) }}
+        </div>
+
+    </div>
+</header>

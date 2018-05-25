@@ -1,0 +1,119 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ trick.name }}{% endblock %}
+
+{% block content %}
+    <section class="nopadding col-lg-12 mx-auto text-center border border-dark">
+
+        {{ include('Trick/modals/delete_trick.html.twig') }}
+
+        {{ include('Trick/header_trick.twig') }}
+
+            <div class="album py-5 bg">
+                <div class="container">
+                    <div class="row">
+                            {% for picture in trick.pictures %}
+                            <div class="col-md-2" id="addPicture{{ loop.index0 }}">
+                                <div class="card mb-4 box-shadow">
+                                    <a href="{{ asset('uploads/pictures/' ~ picture.file) }}"><img class="card-img-top" src="{{ asset('uploads/pictures/' ~ picture.file) }}" alt="none" height="150px"></a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+
+        <div class="album bg">
+            <div class="container">
+                <div class="row">
+                    {% if trick.videos is defined %}
+                        {% for video in trick.videos %}
+                        <div class="col-md-4" id="addVideo{{ loop.index0 }}">
+                            <div class="card mb-4 box-shadow">
+                                <iframe src="https://www.youtube.com/embed/{{ video.url }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-10 mx-auto mt-5 mb-5">
+            <p class="text-justify">{{ trick.description }}</p>
+        </div>
+
+        <div class="col-lg-6 mx-auto mb-5">
+            <i class="fa fa-cog"> {{ trick.category.name }}</i> |
+            <i class="fa fa-clock-o"> Added {{ trick.createDate|date("F jS \\a\\t g:ia") }}
+                {% if trick.editDate is not null %}
+                    & Edited {{ trick.editDate|date("F jS \\a\\t g:ia") }}
+                {% endif %}</i>
+        </div>
+
+        {#Form comment#}
+        {{ include("Comment/form.html.twig") }}
+
+        {#List comments#}
+
+        {{ include("Comment/comments.html.twig") }}
+
+    </section>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+        {{ parent() }}
+    <script type="text/javascript">
+            var stop = 1;
+            var url = "{{ path('snow_tricks_comment_list_comment_ajax', {'id': trick.id, 'lastComment': 'null'})|escape('js') }}";
+            url = url.replace('null', '');
+
+            if($(".listComments").length < 10)
+            {
+                stop = 0;
+            }
+
+            $(window).scroll(function() {
+
+                if(stop > 0)
+                {
+                    if($(window).scrollTop() + $(window).height() >= $(document).height()) {
+                        var last_id = $(".listComments:last").attr("id");
+                        loadMoreData(last_id);
+                    }
+                }
+
+            });
+
+
+            function loadMoreData(last_id){
+                $.ajax(
+                    {
+                        url: url+last_id,
+                        type: "get",
+                        beforeSend: function()
+                        {
+                            $('.ajax-load').show();
+
+                        }
+                    })
+                    .done(function(data)
+                    {
+                        if(!data)
+                            stop--;
+
+                        $('.ajax-load').hide();
+                        $("#comments-data").append(data);
+                    })
+                    .fail(function(jqXHR, ajaxOptions, thrownError)
+                    {
+                        alert('server not responding...');
+                    });
+            }
+    </script>
+    <script src="{{ asset('js/js.js') }}"></script>
+{% endblock %}

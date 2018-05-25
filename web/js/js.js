@@ -18,15 +18,15 @@ $(document).ready(function() {
         }
     }
 
-    $("#snowtricks_trickbundle_trick_frontPicture").change(function(){
+    $("#snowtricks_appbundle_trick_frontPicture").change(function(){
         changeFrontPicture(this);
     });
 
     $('#resetFrontPicture').click(function () {
         var2 = '/img/none.png';
         $('#front_picture').css('background-image', 'url('+var2+')');
-        $("#snowtricks_trickbundle_trick_frontPicture").val('');
-        $("#snowtricks_trickbundle_trick_frontPictureName").val('');
+        $("#snowtricks_appbundle_trick_frontPicture").val('');
+        $("#snowtricks_appbundle_trick_frontPictureName").val('');
     });
 
     // partie vignette
@@ -36,8 +36,6 @@ $(document).ready(function() {
         var cloneCount = $countPictures-1;
     else
         cloneCount = 0;
-
-
 
     function clone() {
         $('#addPicture')
@@ -49,7 +47,7 @@ $(document).ready(function() {
     $('.deletePicture').on('click', function() {
         var $str = $(this).parent().parent().parent().parent().parent().attr('id');
         $id = $str.replace("addPicture", "");
-        var $div = '#snowtricks_trickbundle_trick_pictures_'+$id;
+        var $div = '#snowtricks_appbundle_trick_pictures_'+$id;
         $($div).parent().remove();
         $('#addPicture'+$id).remove()
     });
@@ -57,7 +55,7 @@ $(document).ready(function() {
     $('.addPicture').click(function(){
         var $str = $(this).parent().parent().parent().parent().parent().attr('id');
         $id = $str.replace("addPicture", "");
-        $('#snowtricks_trickbundle_trick_pictures_'+$id+'_file').trigger('click');
+        $('#snowtricks_appbundle_trick_pictures_'+$id+'_file').trigger('click');
         onChange($id);
     });
 
@@ -71,13 +69,22 @@ $(document).ready(function() {
             };
 
             reader.readAsDataURL(input.files[0]);
+
+            var imageName = $('#snowtricks_appbundle_trick_pictures_'+$id+'_fileName');
+            if(imageName.val()==='new')
+            {
+                imageName.val('update');
+            }
         }
     }
 
     function onChange($id) {
-        $('#snowtricks_trickbundle_trick_pictures_'+$id+'_file').change(function(){
+        var image = $('#snowtricks_appbundle_trick_pictures_'+$id+'_file');
+
+        image.change(function(){
             changePicture(this, $id);
         });
+
     }
 
     // partie video
@@ -106,7 +113,7 @@ $(document).ready(function() {
     $('.deleteVideo').on('click', function() {
         var $str = $(this).parent().parent().parent().parent().parent().attr('id');
         $id = $str.replace("addVideo", "");
-        var $div = '#snowtricks_trickbundle_trick_videos_'+$id;
+        var $div = '#snowtricks_appbundle_trick_videos_'+$id;
         $($div).parent().remove();
         $('#addVideo'+$id).remove();
     });
@@ -126,15 +133,16 @@ $(document).ready(function() {
 
     function saveVideo($id) {
         var $url = $('#modalVideo'+$id).find('input').val();
-        $('#snowtricks_trickbundle_trick_videos_'+$id+'_url').val($url);
+        $url = $url.replace("https://youtu.be/", "");
+        $('#snowtricks_appbundle_trick_videos_'+$id+'_url').val($url);
         $('#modalVideo'+$id).modal('toggle');
-        $('#addVideo'+$id).find('iframe').attr('src', $url);
+        $('#addVideo'+$id).find('iframe').attr('src', 'https://www.youtube.com/embed/'+$url);
     }
 
     // partie ajout dynamique form
 
     // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
-    var $container = $('div#snowtricks_trickbundle_trick_pictures');
+    var $container = $('div#snowtricks_appbundle_trick_pictures');
 
     // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
     var $index1 = $container.find('.form-control-file').length;
@@ -142,21 +150,28 @@ $(document).ready(function() {
     // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
     $('#add_picture').click(function(e) {
         addPicture($container);
-        console.log($container);
         clone();
         e.preventDefault(); // évite qu'un # apparaisse dans l'URL
         return false;
     });
 
     // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
-    if ($index1 === 0) {
-        addPicture($container);
-        clone();
-    } else {
+    if ($index1 > 0) {
         // S'il existe déjà des catégories, on ajoute un lien de suppression pour chacune d'entre elles
-        $container.children('div').each(function() {
-            addDeleteLink($(this));
-        });
+        if (window.location.href.indexOf("trick/edit") > -1) {
+            $container.children('div').each(function() {
+                addDeleteLink($(this));
+                clone();
+            });
+        }
+        else
+        {
+            for(var $i = 1; $i<$index1+1; $i++)
+            {
+            clone();
+            }
+        }
+
     }
 
     // La fonction qui ajoute un formulaire
@@ -171,6 +186,8 @@ $(document).ready(function() {
 
         // On ajoute le prototype modifié à la fin de la balise <div>
         $container.append($prototype);
+
+        $prototype.find("[id$='fileName']").val('new');
 
         // Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
         $index1++;
@@ -195,7 +212,7 @@ $(document).ready(function() {
 
     //    Video ////////////////////////////////
 
-    var $container2 = $('div#snowtricks_trickbundle_trick_videos');
+    var $container2 = $('div#snowtricks_appbundle_trick_videos');
 
     // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
     var $index = $container2.find(':input').length;
@@ -209,14 +226,21 @@ $(document).ready(function() {
     });
 
     // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
-    if ($index === 0) {
-        addVideo($container2);
-        cloneVideo();
-    } else {
-        // S'il existe déjà des catégories, on ajoute un lien de suppression pour chacune d'entre elles
-        $container2.children('div').each(function() {
-            addDeleteLink($(this));
-        });
+    if ($index > 0) {
+
+        if (window.location.href.indexOf("trick/edit") > -1) {
+            $container2.children('div').each(function() {
+                addDeleteLink($(this));
+                cloneVideo();
+            });
+        }
+        else
+        {
+            for(var $i = 1; $i<$index+1; $i++)
+            {
+                cloneVideo();
+            }
+        }
     }
 
     // La fonction qui ajoute un formulaire CategoryType
