@@ -23,7 +23,7 @@ class PasswordEncoder
 
     public function encodePassword(User $user, $password)
     {
-        return $this->userPasswordEncoder->encodePassword($user, $password);
+        return $var = $this->userPasswordEncoder->encodePassword($user, $password);
     }
 
 }

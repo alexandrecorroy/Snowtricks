@@ -13,6 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Comment
 {
+
+    const MAX_COMMENT_LENGIH = 255;
     /**
      * @var int
      *
@@ -26,6 +28,10 @@ class Comment
      * @var string
      * @Assert\NotBlank(
      *     message= "Your comment cannot be empty."
+     * )
+     * @Assert\Length(
+     *     max= Comment::MAX_COMMENT_LENGIH,
+     *     maxMessage="Message cannot have more 255 characters."
      * )
      * @ORM\Column(name="message", type="string", length=255)
      */

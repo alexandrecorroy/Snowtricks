@@ -69,6 +69,13 @@ login : userdemo
 password : userdemo
 ```
 
+## Tests
+
+Testing the application with PHPUnit in Snowtricks folder :
+```
+./vendor/bin/simple-phpunit
+```
+
 ## Authors
 
 * **Corroy Alexandre** - *Initial work* - [CORROYAlexandre](https://github.com/alexandrecorroy)
