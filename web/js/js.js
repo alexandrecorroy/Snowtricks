@@ -265,4 +265,9 @@ $(document).ready(function() {
         // Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
         $index++;
     }
+
+    $('.d-sm-none').click(function () {
+        $('.d-sm-none').toggle();
+        $('.d-none').removeClass('d-none d-sm-block');
+    })
 });

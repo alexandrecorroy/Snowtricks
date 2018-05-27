@@ -9,6 +9,12 @@
 
         {{ include('Trick/header_trick.twig') }}
 
+        <div class="d-sm-none mx-auto">
+            <button type="button" class="btn btn-dark mt-3">See Medias</button>
+        </div>
+
+        <div class="d-none d-sm-block">
+
             <div class="album py-5 bg">
                 <div class="container">
                     <div class="row">
@@ -24,22 +30,23 @@
             </div>
 
 
-        <div class="album bg">
-            <div class="container">
-                <div class="row">
-                    {% if trick.videos is defined %}
-                        {% for video in trick.videos %}
-                        <div class="col-md-4" id="addVideo{{ loop.index0 }}">
-                            <div class="card mb-4 box-shadow">
-                                <iframe src="https://www.youtube.com/embed/{{ video.url }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            <div class="album bg">
+                <div class="container">
+                    <div class="row">
+                        {% if trick.videos is defined %}
+                            {% for video in trick.videos %}
+                            <div class="col-md-4" id="addVideo{{ loop.index0 }}">
+                                <div class="card mb-4 box-shadow">
+                                    <iframe src="https://www.youtube.com/embed/{{ video.url }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                </div>
                             </div>
-                        </div>
-                        {% endfor %}
-                    {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
 
+        </div>
         <div class="col-lg-10 mx-auto mt-5 mb-5">
             <p class="text-justify">{{ trick.description }}</p>
         </div>
@@ -114,6 +121,7 @@
                         alert('server not responding...');
                     });
             }
+
     </script>
     <script src="{{ asset('js/js.js') }}"></script>
 {% endblock %}
