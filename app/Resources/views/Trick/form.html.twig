@@ -14,6 +14,11 @@
 
         {{ include('Trick/form_header.html.twig') }}
 
+        <div class="d-sm-none mx-auto">
+            <button type="button" class="btn btn-dark mt-3 mb-3">See Medias</button>
+        </div>
+        <div class="d-none d-sm-table-row">
+
             <div class="album py-5 bg">
                 <div class="container">
                     <div class="row">
@@ -31,11 +36,7 @@
                             </div>
                         </div>
                         {% if trick.pictures is defined %}
-                            <div class="d-sm-none mx-auto">
-                                <button type="button" class="btn btn-dark mt-3">See Medias</button>
-                            </div>
                             {% for picture in trick.pictures %}
-                        <div class="d-none d-sm-block">
                             <div class="col-md-2" id="addPicture{{ loop.index0 }}">
                                 <div class="card mb-4 box-shadow">
                                     <img class="card-img-top" src="{{ asset('uploads/pictures/' ~ picture.fileName) }}" alt="none" height="150px">
@@ -49,7 +50,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
                             {% endfor %}
                         {% endif %}
                     </div>
@@ -75,7 +75,6 @@
                     </div>
                     {% if trick.videos is defined %}
                         {% for video in trick.videos %}
-                    <div class="d-none d-sm-block">
                         <div class="col-md-4" id="addVideo{{ loop.index0 }}">
                             <div class="card mb-4 box-shadow">
                                 <iframe src="https://www.youtube.com/embed/{{ video.url }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -89,11 +88,11 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
                         {% endfor %}
                     {% endif %}
                 </div>
             </div>
+        </div>
         </div>
 
         <div class="col-lg-8 mx-auto">
