@@ -15,8 +15,8 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class TrickControllerTest extends WebTestCase
 {
-    const CATEGORY_GRABS_ID = 64;
-    const CATEGORY_FLIPS_ID = 66;
+    const CATEGORY_GRABS_ID = 78;
+    const CATEGORY_FLIPS_ID = 80;
     private $client = null;
 
     public function setUp()
@@ -62,7 +62,7 @@ class TrickControllerTest extends WebTestCase
     {
         $this->logIn();
 
-        $crawler = $this->client->request('POST', '/trick/edit/116');
+        $crawler = $this->client->request('POST', '/trick/edit/137');
         $form = $crawler->selectButton('Save')->form(array(
             'snowtricks_appbundle_trick[name]'      => 'Trick Name Edited !',
             'snowtricks_appbundle_trick[description]'      => 'Edit Description !',
@@ -76,7 +76,7 @@ class TrickControllerTest extends WebTestCase
     public function testViewTrick()
     {
 
-        $crawler = $this->client->request('GET', '/trick/116/japan-air');
+        $crawler = $this->client->request('GET', 'trick/137/japan-air');
         $this->assertTrue($this->client->getResponse()->isSuccessful(), 'response status is 2xx');
 
     }

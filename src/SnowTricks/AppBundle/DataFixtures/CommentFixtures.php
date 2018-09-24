@@ -28,13 +28,16 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $objectManager)
     {
 
-        $comment = new Comment();
+        for($i=1; $i<25; $i++)
+        {
+            $comment = new Comment();
+            $comment->setMessage('Comment '.$i);
+            $comment->setTrick($this->getReference('first-trick'));
+            $comment->setUser($this->getReference('first-user'));
 
-        $comment->setMessage('First Trick = First Comment !');
-        $comment->setTrick($this->getReference('first-trick'));
-        $comment->setUser($this->getReference('first-user'));
+            $objectManager->persist($comment);
+        }
 
-        $objectManager->persist($comment);
         $objectManager->flush();
 
     }

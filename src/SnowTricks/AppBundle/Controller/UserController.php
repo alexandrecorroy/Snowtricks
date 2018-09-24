@@ -15,7 +15,7 @@ class UserController extends Controller
 {
     /**
      * @Route("/dashboard", name="snow_tricks_user_dashboard")
-     * @Method("GET")
+     * @Method({"GET","POST"})
      */
     public function dashboardAction(Request $request, UserManager $userManager)
     {

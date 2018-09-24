@@ -101,7 +101,8 @@ class SecurityController extends Controller
                 array('username' => $request->get('username'))
             );
 
-            $userManager->resetPassword($user);
+            if(!is_null($user))
+                $userManager->resetPassword($user);
 
             $this->addFlash(
                 'notice',
