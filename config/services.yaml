@@ -6,7 +6,7 @@
 parameters:
     #parameter_name: value
     pictures_directory: '%kernel.project_dir%/public/uploads/pictures'
-    mailer_from: yorkknew@gmail.com
+    mailer_from: '%env(MAILER_FROM)%'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -37,6 +37,10 @@ services:
     App\Service\RemoveFile:
         arguments:
             $targetDirectory: '%pictures_directory%'
+
+    App\Service\Mailer:
+        arguments:
+            $mailerFrom: '%mailer_from%'
 
     App\EventListener\PictureUploadListener:
         tags:

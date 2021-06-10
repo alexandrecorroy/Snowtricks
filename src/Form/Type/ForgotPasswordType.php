@@ -17,8 +17,10 @@ use Symfony\Component\Validator\Constraints\Length;
 
 class ForgotPasswordType extends AbstractType
 {
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
         $builder->add('username', TextType::class, array(
             'constraints' => new Length(array('min' => User::USERNAME_MIN_LENGTH))
         ))
@@ -28,6 +30,6 @@ class ForgotPasswordType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return null;
+        return '';
     }
 }

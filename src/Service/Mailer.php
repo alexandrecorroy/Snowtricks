@@ -15,12 +15,15 @@ class Mailer
 {
     private $twig;
 
+    private $mailer;
+
     private $mailerFrom;
 
-    public function __construct(Environment $twig)
+    public function __construct(Environment $twig, \Swift_Mailer $mailer, $mailerFrom)
     {
         $this->twig = $twig;
-        $this->mailerFrom = '$mailerFrom';
+        $this->mailer = $mailer;
+        $this->mailerFrom = $mailerFrom;
     }
 
     public function getMailerFrom()
@@ -29,11 +32,11 @@ class Mailer
     }
 
     public function sendMail(
-        User $user, $subject, $template, \Swift_Mailer $mailer
+        User $user, $subject, $template
     ): void
     {
-        $message = \Swift_Message::newInstance()
-            ->setSubject($subject)
+
+        $message = (new \Swift_Message($subject))
             ->setFrom($this->getMailerFrom())
             ->setTo($user->getEmail())
             ->setBody(
@@ -45,6 +48,6 @@ class Mailer
                 ),
                 'text/html'
             );
-        $mailer->send($message);
+        $this->mailer->send($message);
     }
 }
