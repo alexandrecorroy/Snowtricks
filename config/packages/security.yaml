@@ -1,0 +1,39 @@
+# To get started with security, check out the documentation:
+# https://symfony.com/doc/current/security.html
+security:
+    encoders:
+        App\Entity\User: bcrypt
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+    providers:
+        main:
+            entity:
+                class:    App\Entity\User
+                property: username
+
+    access_control:
+        - { path: ^/trick/add, role: ROLE_USER }
+        - { path: ^/trick/edit, role: ROLE_USER }
+        - { path: ^/comment/add, role: ROLE_USER }
+        - { path: ^/dashboard, role: ROLE_USER }
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            pattern:   ^/
+            anonymous: true
+            provider: main
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+            form_login:
+                login_path: login
+            logout:
+                path:       logout
+                target:     login
