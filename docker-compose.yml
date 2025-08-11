@@ -1,0 +1,43 @@
+services:
+  php:
+    image: yorkknew/snowtricks-img:1.0
+    environment:
+      APP_ENV: prod
+      DATABASE_URL: mysql://snowtricks:snowtricks@db:3306/snowtricks
+      APP_SECRET: ba2beed6747a44238a9e3f37f156d9fb
+      MAILER_FROM: "contact@alexandrecorroy.fr"
+      MAILER_URL: ""
+    depends_on:
+      - db
+    networks:
+      - snownet
+
+  web:
+    image: nginx:alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html:delegated
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+    networks:
+      - snownet
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: snowtricks
+      MYSQL_DATABASE: snowtricks
+      MYSQL_USER: snowtricks
+      MYSQL_PASSWORD: snowtricks
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - snownet
+
+volumes:
+  db_data:
+
+networks:
+  snownet:

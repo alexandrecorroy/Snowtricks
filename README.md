@@ -2,6 +2,12 @@
 
 It's a Symfony 5.3 project. A community of snowboarder to learn how to make tricks.
 
+---
+
+![Aperçu de la page d'accueil](docs/screenshot-home.png)
+
+---
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
@@ -50,6 +56,13 @@ To test user features, an user will be created with :
 ```
 login : userdemo
 password : userdemo
+```
+
+## Docker
+
+Docker installation :
+```
+docker-compose up -d
 ```
 
 ## Tests
